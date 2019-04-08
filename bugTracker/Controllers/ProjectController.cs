@@ -45,19 +45,8 @@ namespace bugTracker.Controllers
                    CountOfTickets = 0
                }).ToList();
             return View("ProjectList", model);
-
-            //var userId = User.Identity.GetUserId();
-            //var isAdmin = User.IsInRole("Admin");
-            //var model = DbContext.Projects.Where(p => isAdmin ? true : p.UserId == userId)
-            //   .Select(p => new IndexProject
-            //   {
-            //       Id = p.Id,
-            //       Name = p.Name,
-            //       Created = p.Created,
-            //       Updated = p.Updated,
-            //   }).ToList();
-            //return View(model);
         }
+
         [HttpGet]
         public ActionResult MyProject()
         {
