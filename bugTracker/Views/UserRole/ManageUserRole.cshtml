@@ -1,0 +1,61 @@
+﻿@model EditUserRole
+@{
+    ViewBag.Title = "ManageUserRole";
+}
+
+<h2>ManageUserRole</h2>
+<div id="content-wrapper">
+    <div class="container-fluid">
+        <div class="card-body">
+            <div class="card-header">
+                <h5>UserName: @Model.UserName</h5>
+
+            </div>
+            <table class="table table-bordered" id="dataTable" width="110%" cellspacing="0">
+                <thead>
+                    <tr></tr>
+                    <tr>
+                        <th>Existing role</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var role in Model.Roles)
+                    {
+                        <tr>
+                            <td>@role</td>
+                            <td>
+                                <span>@Html.ActionLink("Remove", "DeleteRole", new { userId = Model.Id, roleName = role })</span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <table class="table table-bordered" id="dataTable" width="110%" cellspacing="0">
+                <thead>
+                    <tr></tr>
+                    <tr>
+                        <th>Additive role</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var roleToAdd in Model.RolesToAdd)
+                    {
+                        <tr>
+                            <td>@roleToAdd</td>
+                            <td>
+                                <span>@Html.ActionLink("Add", "AddRole", new { userId = Model.Id, roleName = roleToAdd })</span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div>
+                <strong>@Html.ActionLink("Back Last Page", "Index")</strong>
+            </div>
+        </div>
+    </div>
+</div>
+

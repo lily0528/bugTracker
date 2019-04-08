@@ -1,0 +1,69 @@
+﻿@model List<UserRole>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+<div id="content-wrapper">
+    <div class="container-fluid">
+        <!-- DataTables Example -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <tr></tr>
+                        <thead class="card-header">
+                            <tr>
+                                <th>Name</th>
+                                <th>UserName</th>
+                                <th>Roles</th>
+                                @*<th>Project Manager</th>
+                                <th>Developer</th>
+                                <th>Submitter</th>*@
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var record in Model)
+                            {
+                                <tr>
+                                    <td>@record.DisplayName</td>
+                                    <td>@record.UserName</td>
+                                    <td>
+                                        @foreach (var role in record.Roles)
+                                        {
+                                        <span>@role,</span>
+                                        }
+                                    </td>
+
+                                    @*@foreach (var item in record.Roles)
+                                        {
+                                            if (item != "Admin" || item != "Project Manager" ||item != "Developer")
+                                            {
+                                                <td></td>
+                                            }
+
+                                            <td class="td-btn">
+                                                <h5><i class="far fa-user fa-fw"></i> @item</h5>
+                                            </td>
+                                        }*@
+                                    @*@if (User.IsInRole("Admin") && User.Identity.IsAuthenticated)*@
+                                    @*{*@
+                                    <td>
+                                        <a href="@Url.Action("ManageUserRole", "UserRole", new { id = record.Id })">
+                                            <i class="far fa-edit"></i>
+                                        </a>
+                                    </td>
+                                    @*}*@
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+        </div>
+    </div>
+

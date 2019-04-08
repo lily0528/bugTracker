@@ -1,0 +1,62 @@
+﻿@model EditMemberProject
+@{
+    ViewBag.Title = "EditMemberProject";
+}
+
+<h2>EditMemberProject</h2>
+
+<div id="content-wrapper">
+    <div class="container-fluid">
+        <div class="card-body">
+            @Html.AntiForgeryToken()
+            <div class="card-header">
+                <h5>Project Id: @Model.ProjectId</h5>
+            </div>
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead class="card-header">
+                    <tr></tr>
+                    <tr>
+                        <th>Members of Project</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model.AssignedList)
+                    {
+                        <tr>
+                            <td>@user</td>
+                            <td>
+                                <span>@Html.ActionLink("Remove", "RemoveMemberToProject", new { userName = user, id = Model.ProjectId })</span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead class="card-header">
+                    <tr></tr>
+                    <tr>
+                        <th>Optional user</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model.NotAssignedList)
+                    {
+                        <tr>
+                            <td>@user</td>
+                            <td>
+                                <span>@Html.ActionLink("Add", "AddMemberToProject", new { userName = user, id = Model.ProjectId })</span>
+                                @*<span>&emsp;</span>*@
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div>
+                <strong>@Html.ActionLink("Back Last Page", "ProjectList")</strong>
+            </div>
+        </div>
+    </div>
+</div>
