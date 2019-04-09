@@ -48,6 +48,7 @@ namespace bugTracker.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public ActionResult MyProject()
         {
             var userId = User.Identity.GetUserId();

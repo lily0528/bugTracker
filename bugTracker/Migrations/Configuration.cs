@@ -1,9 +1,11 @@
 namespace bugTracker.Migrations
 {
     using bugTracker.Models;
+    using bugTracker.Models.Domain;
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.Identity.EntityFramework;
     using System;
+    using System.Collections.Generic;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
@@ -82,6 +84,24 @@ namespace bugTracker.Migrations
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
             //  to avoid creating duplicate seed data.
+             
+            context.TicketTypes.AddOrUpdate(t => t.Name,
+                new TicketType { Name = "Bug" },
+                new TicketType { Name = "Feature" },
+                new TicketType { Name = "Database" },
+                new TicketType { Name = "Support" });
+
+            context.TicketPriorities.AddOrUpdate(t => t.Name,
+               new TicketPriority { Name = "Low" },
+               new TicketPriority { Name = "Medium" },
+               new TicketPriority { Name = "High" }
+              );
+
+            context.TicketStatuses.AddOrUpdate(t => t.Name,
+              new TicketStatus { Name = "Open" },
+              new TicketStatus { Name = "Resolved" },
+              new TicketStatus { Name = "Rejected" }
+              );
         }
     }
 }

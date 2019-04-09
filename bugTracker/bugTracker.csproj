@@ -177,6 +177,8 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
+    <Compile Include="Controllers\TicketController.cs" />
+    <Compile Include="Models\Helpers\TicketHelper.cs" />
     <Compile Include="Controllers\UserRoleController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -184,12 +186,18 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Domain\Ticket.cs" />
+    <Compile Include="Models\Domain\TicketAttachment.cs" />
+    <Compile Include="Models\Domain\TicketComment.cs" />
+    <Compile Include="Models\Domain\TicketPriority.cs" />
+    <Compile Include="Models\Domain\TicketStatus.cs" />
+    <Compile Include="Models\Domain\TicketType.cs" />
     <Compile Include="Models\EmailService.cs" />
     <Compile Include="Models\Helpers\ProjectsHelper.cs" />
     <Compile Include="Models\Helpers\UserRoleHelper.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Domain\Project.cs" />
+    <Compile Include="Models\ViewModels\CreateTicket.cs" />
     <Compile Include="Models\ViewModels\ProjectUser.cs" />
     <Compile Include="Models\ViewModels\CreateProject.cs" />
     <Compile Include="Models\ViewModels\EditMemberProject.cs" />
@@ -1491,6 +1499,8 @@
     <Content Include="Views\UserRole\ManageUserRole.cshtml" />
     <Content Include="Views\Project\EditMemberProject.cshtml" />
     <Content Include="Views\Project\MyProject.cshtml" />
+    <Content Include="Views\Ticket\Index.cshtml" />
+    <Content Include="Views\Ticket\CreateTicket.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

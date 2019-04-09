@@ -1,19 +1,21 @@
-﻿@model List<IndexProject>
+﻿
 @{
-    ViewBag.Title = "ProjectList";
+    ViewBag.Title = "Index";
 }
+
+<h2>Index</h2>
 
 <div id="content-wrapper">
     <div class="container-fluid">
         <!-- DataTables Example -->
 
         <div class="card mb-3">
-            @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("Project Manager")))
-            {
+            @*@if (User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("Project Manager")))
+            {*@
                 <div class="card-header">
-                    <div><a class="btn btn-primary" href="@Url.Action("CreateProject")">Create New</a></div>
+                    <div><a class="btn btn-primary" href="@Url.Action("CreateTicket")">Create New</a></div>
                 </div>
-            }
+            @*}*@
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -38,7 +40,7 @@
                             </tr>
                         </tfoot>
                         <tbody>
-                            @foreach (var record in Model)
+                            @*@foreach (var record in Model)
                             {
                                 <tr>
                                     <td>@record.Name</td>
@@ -56,7 +58,7 @@
                                         </a>
                                     </td>
                                 </tr>
-                            }
+                            }*@
                         </tbody>
                     </table>
                 </div>
@@ -115,4 +117,6 @@
     <script src="~/js/demo/chart-area-demo.js"></script>
 
 }
+
+
 
