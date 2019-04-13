@@ -45,10 +45,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=7.0.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.7.0.1\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -178,6 +185,8 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Controllers\TicketController.cs" />
+    <Compile Include="Models\ViewModels\TicketAssginDeveloper.cs" />
+    <Compile Include="Models\Helpers\AutoMapperConfig.cs" />
     <Compile Include="Models\Helpers\TicketHelper.cs" />
     <Compile Include="Controllers\UserRoleController.cs" />
     <Compile Include="Global.asax.cs">
@@ -198,6 +207,8 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Domain\Project.cs" />
     <Compile Include="Models\ViewModels\CreateTicket.cs" />
+    <Compile Include="Models\ViewModels\EditTicket.cs" />
+    <Compile Include="Models\ViewModels\IndexTicket.cs" />
     <Compile Include="Models\ViewModels\ProjectUser.cs" />
     <Compile Include="Models\ViewModels\CreateProject.cs" />
     <Compile Include="Models\ViewModels\EditMemberProject.cs" />
@@ -227,6 +238,7 @@
     <Content Include="js\sb-admin.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="libman.json" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -1501,6 +1513,9 @@
     <Content Include="Views\Project\MyProject.cshtml" />
     <Content Include="Views\Ticket\Index.cshtml" />
     <Content Include="Views\Ticket\CreateTicket.cshtml" />
+    <Content Include="Views\Ticket\EditTicket.cshtml" />
+    <Content Include="Views\Ticket\FromProjects.cshtml" />
+    <Content Include="Views\Ticket\AssignDeveloper.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

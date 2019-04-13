@@ -1,5 +1,6 @@
 ﻿using bugTracker.Models.Domain;
 using System;
+using System.Collections.Generic;
 
 namespace bugTracker.Models
 {
@@ -28,6 +29,9 @@ namespace bugTracker.Models
 
         public string CreatedById { get; set; }
         public virtual ApplicationUser CreatedBy { get; set; }
+
+        public virtual List<TicketComment> Comments { get; set; }
+        public virtual List<TicketAttachment> Attachments { get; set; }
 
         public Ticket()
         {

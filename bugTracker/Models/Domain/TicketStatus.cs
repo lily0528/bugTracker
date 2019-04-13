@@ -8,9 +8,9 @@ namespace bugTracker.Models
         public string Name { get; set; }
         public virtual List<Ticket> Tickets { get; set; }
 
-        public TicketStatus()
-        {
-            Tickets = new List<Ticket>();
-        }
+        //public TicketStatus()
+        //{
+        //    Tickets = new List<Ticket>();
+        //}
     }
 }

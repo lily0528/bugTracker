@@ -1,9 +1,9 @@
 ﻿@model List<IndexTicket>
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "FromProjects";
 }
 
-<h2>Index</h2>
+<h2>FromProjects</h2>
 
 <div id="content-wrapper">
     <div class="container-fluid">
@@ -52,33 +52,26 @@
                         <tbody>
                             @foreach (var record in Model)
                             {
-                            <tr>
-                                <td>@record.Project.Name</td>
-                                <td>@record.Id</td>
-                                <td>@record.Title</td>
-                                <td>@record.Created</td>
-                                <td>@record.Updated</td>
-                                <td>@record.TicketType.Name</td>
-                                <td>@record.TicketStatus.Name</td>
-                                <td>@record.TicketPriority.Name</td>
-                                <td>@record.CreatedBy.UserName</td>
-                                @*@if (record.AssignedTo.UserName == null)
-                                {
-                                    <td></td>
-                                }*@
-                                @*else
-                                {*@
-                                    <td>@record.AssignedTo.UserName</td>
-                                @*}*@
-                                <td>
-                                    <a href="@Url.Action("EditTicket", "Ticket", new { id = record.Id })">
-                                        <i class="far fa-edit"></i>
-                                    </a>
-                                    <a href="@Url.Action("AssignDeveloper", "Ticket", new { id = record.Id })">
-                                        <i class="fas fa-user"></i>
-                                    </a>
-                                </td>
-                            </tr>
+                                <tr>
+                                    <td>@record.Project.Name</td>
+                                    <td>@record.Id</td>
+                                    <td>@record.Title</td>
+                                    <td>@record.Created</td>
+                                    <td>@record.Updated</td>
+                                    <td>@record.TicketType.Name</td>
+                                    <td>@record.TicketStatus.Name</td>
+                                    <td>@record.TicketPriority.Name</td>
+                                    <td>@record.CreatedBy.UserName</td>
+                                    <td>@record.AssignedTo</td>
+                                    <td>
+                                        <a href="@Url.Action("EditTicket", "Ticket", new { id = record.Id })">
+                                            <i class="far fa-edit"></i>
+                                        </a>
+                                        <a href="@Url.Action("EditTicket", "Ticket", new { id = record.Id })">
+                                            <i class="fas fa-user"></i>
+                                        </a>
+                                    </td>
+                                </tr>
                             }
                         </tbody>
                     </table>
@@ -138,6 +131,5 @@
     <script src="~/js/demo/chart-area-demo.js"></script>
 
 }
-
 
 

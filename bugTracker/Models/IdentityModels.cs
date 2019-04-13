@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Security.Claims;
@@ -49,6 +50,7 @@ namespace bugTracker.Models
         public DbSet<TicketComment> TicketComments { get; set; }
         public DbSet<TicketAttachment> TicketAttachments { get; set; }
         public DbSet<TicketPriority> TicketPriorities { get; set; }
+        public IEnumerable ProjectTypes { get; internal set; }
 
         public static ApplicationDbContext Create()
         {

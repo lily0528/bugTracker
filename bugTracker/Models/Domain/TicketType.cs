@@ -10,9 +10,9 @@ namespace bugTracker.Models.Domain
         public int Id { get; set; }
         public string Name { get; set; }
         public virtual List<Ticket> Tickets { get; set; }
-        public TicketType()
-        {
-            Tickets = new List<Ticket>();
-        }
+        //public TicketType()
+        //{
+        //    Tickets = new List<Ticket>();
+        //}
     }
 }
