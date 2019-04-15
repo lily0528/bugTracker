@@ -17,14 +17,15 @@ namespace bugTracker.Models.ViewModels
         public int ProjectId { get; set; }
         public virtual Project Project { get; set; }
 
-        //public int TicketTypeId { get; set; }
-        public virtual TicketType TicketType { get; set; }
+        //Common implementation methods
+        //public virtual TicketType TicketType { get; set; }
+        //public virtual TicketPriority TicketPriority { get; set; }
+        //public virtual TicketStatus TicketStatus { get; set; }
 
-        //public int TicketPriorityId { get; set; }
-        public virtual TicketPriority TicketPriority { get; set; }
-
-        //public int TicketStatusId { get; set; }
-        public virtual TicketStatus TicketStatus { get; set; }
+        //User automapper to do
+        public string TicketTypeName { get; set; }
+        public string TicketPriorityName { get; set; }
+        public string TicketStatusName { get; set; }
 
         public string AssignedToId { get; set; }
         public virtual ApplicationUser AssignedTo { get; set; }
@@ -32,21 +33,5 @@ namespace bugTracker.Models.ViewModels
         public string CreatedById { get; set; }
         public virtual ApplicationUser CreatedBy { get; set; }
 
-
-        //public string ProjectName { get; set; }
-
-        //public string TypeName { get; set; }
-
-        //public string StatusName { get; set; }
-    
-        //public string PriorityName { get; set; }
-    
-        //public string Creator { get; set; }
-     
-        //public string Assignee { get; set; }
-   
-        //public int ProjectId { get; set; }
-        //public string AssigneeId { get; set; }
-        //public string CreatorId { get; set; }
     }
 }

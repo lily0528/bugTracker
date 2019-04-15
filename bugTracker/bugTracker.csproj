@@ -184,7 +184,12 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
+    <Compile Include="Controllers\TicketAttachmentController.cs" />
+    <Compile Include="Controllers\TicketCommentController.cs" />
     <Compile Include="Controllers\TicketController.cs" />
+    <Compile Include="Models\Constants.cs" />
+    <Compile Include="Models\ViewModels\CreateComment.cs" />
+    <Compile Include="Models\ViewModels\CreateTicketAttachment.cs" />
     <Compile Include="Models\ViewModels\TicketAssginDeveloper.cs" />
     <Compile Include="Models\Helpers\AutoMapperConfig.cs" />
     <Compile Include="Models\Helpers\TicketHelper.cs" />
@@ -214,6 +219,8 @@
     <Compile Include="Models\ViewModels\EditMemberProject.cs" />
     <Compile Include="Models\ViewModels\EditProject.cs" />
     <Compile Include="Models\ViewModels\IndexProject.cs" />
+    <Compile Include="Models\ViewModels\TicketAttachmentView.cs" />
+    <Compile Include="Models\ViewModels\TicketCommentView.cs" />
     <Compile Include="Models\ViewModels\UserRole.cs" />
     <Compile Include="Models\ViewModels\EditUserRole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -1516,6 +1523,10 @@
     <Content Include="Views\Ticket\EditTicket.cshtml" />
     <Content Include="Views\Ticket\FromProjects.cshtml" />
     <Content Include="Views\Ticket\AssignDeveloper.cshtml" />
+    <Content Include="Views\TicketComment\Index.cshtml" />
+    <Content Include="Views\TicketAttachment\Index.cshtml" />
+    <Content Include="Views\TicketAttachment\CreateAttachment.cshtml" />
+    <Content Include="Views\TicketComment\CreateComment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

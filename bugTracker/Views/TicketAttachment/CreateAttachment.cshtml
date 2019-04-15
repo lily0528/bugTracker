@@ -1,0 +1,25 @@
+﻿@model CreateTicketAttachment
+@{
+    ViewBag.Title = "CreateAttachment";
+}
+
+<h2>CreateAttachment</h2>
+<div class="col-12 col-lg-9">
+    @if (Model != null)
+    {   
+        <div><span><strong>TicketId:</strong></span>@Model.TicketId</div>
+    }
+    <form method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            @Html.LabelFor(p => p.Description, "Ticket Attachment:")
+            @Html.TextBoxFor(p => p.Description, new { @class = "form-control", placeholder = "Description" })
+        </div>
+        <div class="form-group">
+            <input type="file" name="Media" />
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    @*@Html.Hidden("TicketId", Model.ToString())
+    @Html.Hidden("ProjectId")*@
+    @Html.Action("Index", "TicketAttachment", new { id = Model.TicketId })
+</div>

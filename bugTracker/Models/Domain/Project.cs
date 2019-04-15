@@ -11,9 +11,11 @@ namespace bugTracker.Models
         public Project()
         {
             Users = new List<ApplicationUser>();
+            Tickets = new List<Ticket>();
             Created = DateTime.Now;
         }
 
+        
         public int Id { get; set; }
         [Required]
         [StringLength(100, MinimumLength = 4, ErrorMessage = "The {0} must be between {2} and {1} characters.")]
@@ -26,4 +28,5 @@ namespace bugTracker.Models
         public virtual List<ApplicationUser> Users { get; set; }
         public virtual List<Ticket> Tickets { get; set; }
     }
+
 }

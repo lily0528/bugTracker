@@ -12,6 +12,7 @@ namespace bugTracker.Models.ViewModels
         [Required]
         [StringLength(100, MinimumLength = 4, ErrorMessage = "The {0} must be between {2} and {1} characters.")]
         public string Name { get; set; }
+        [Required]
         public string Description { get; set; }
         public string UserId { get; set; }
         public virtual ApplicationUser User { get; set; }

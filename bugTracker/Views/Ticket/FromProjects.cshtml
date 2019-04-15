@@ -58,11 +58,22 @@
                                     <td>@record.Title</td>
                                     <td>@record.Created</td>
                                     <td>@record.Updated</td>
-                                    <td>@record.TicketType.Name</td>
-                                    <td>@record.TicketStatus.Name</td>
-                                    <td>@record.TicketPriority.Name</td>
+                                    <td>@record.TicketTypeName</td>
+                                    <td>@record.TicketStatusName</td>
+                                    <td>@record.TicketPriorityName</td>
                                     <td>@record.CreatedBy.UserName</td>
-                                    <td>@record.AssignedTo</td>
+                                    @*<td>@record.TicketType.Name</td>
+                                        <td>@record.TicketStatus.Name</td>
+                                        <td>@record.TicketPriority.Name</td>
+                                        <td>@record.CreatedBy.UserName</td>*@
+                                    @if (record.AssignedTo == null)
+                                    {
+                                        <td></td>
+                                    }
+                                    else
+                                    {
+                                        <td>@record.AssignedTo.UserName</td>
+                                    }
                                     <td>
                                         <a href="@Url.Action("EditTicket", "Ticket", new { id = record.Id })">
                                             <i class="far fa-edit"></i>

@@ -58,26 +58,32 @@
                                 <td>@record.Title</td>
                                 <td>@record.Created</td>
                                 <td>@record.Updated</td>
-                                <td>@record.TicketType.Name</td>
-                                <td>@record.TicketStatus.Name</td>
-                                <td>@record.TicketPriority.Name</td>
+                                <td>@record.TicketTypeName</td>
+                                <td>@record.TicketStatusName</td>
+                                <td>@record.TicketPriorityName</td>
                                 <td>@record.CreatedBy.UserName</td>
-                                @*@if (record.AssignedTo.UserName == null)
+                                @if (record.AssignedTo == null)
                                 {
                                     <td></td>
-                                }*@
-                                @*else
-                                {*@
+                                }
+                                else
+                                {
                                     <td>@record.AssignedTo.UserName</td>
-                                @*}*@
-                                <td>
-                                    <a href="@Url.Action("EditTicket", "Ticket", new { id = record.Id })">
-                                        <i class="far fa-edit"></i>
-                                    </a>
-                                    <a href="@Url.Action("AssignDeveloper", "Ticket", new { id = record.Id })">
-                                        <i class="fas fa-user"></i>
-                                    </a>
-                                </td>
+                                }
+                                    <td>
+                                        <a href="@Url.Action("EditTicket", "Ticket", new { id = record.Id })">
+                                            <i class="far fa-edit"></i>
+                                        </a>
+                                        <a href="@Url.Action("AssignDeveloper", "Ticket", new { id = record.Id })">
+                                            <i class="fas fa-user"></i>
+                                        </a>
+                                        <a href="@Url.Action("CreateAttachment", "TicketAttachment", new { id = record.Id, projectId = record.ProjectId})">
+                                            <i class="fas fa-paperclip"></i>
+                                        </a>
+                                        <a href="@Url.Action("CreateComment", "TicketComment", new { id = record.Id})">
+                                            <i class="fas fa-comment"></i>
+                                        </a>
+                                    </td>
                             </tr>
                             }
                         </tbody>

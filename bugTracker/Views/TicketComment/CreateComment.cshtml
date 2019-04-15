@@ -1,0 +1,25 @@
+﻿@model CreateComment
+@{
+    ViewBag.Title = "CreateComment";
+}
+
+<h2>CreateComment</h2>
+
+<div class="col-12 col-lg-9">
+    @if (Model != null)
+    {
+        <div><span><strong>TicketId:</strong></span>@Model.TicketId</div>
+    }
+        <form method="post" enctype="multipart/form-data">
+            @Html.ValidationSummary(false)
+            <div class="form-group">
+                @Html.LabelFor(p => p.Comment, "Ticket Comment:")
+                @Html.TextAreaFor(p => p.Comment, new { @class = "form-control", placeholder = "Comment", rows = 5, columns = 10 })
+                @Html.ValidationMessageFor(input => input.Comment, "", new { @class = "text-danger" })
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    @*@Html.Hidden("TicketId", Model.ToString())
+        @Html.Hidden("ProjectId")*@
+    @Html.Action("Index", "TicketComment", new { id = Model.TicketId })
+</div>

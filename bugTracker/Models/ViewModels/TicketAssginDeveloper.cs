@@ -14,6 +14,9 @@ namespace bugTracker.Models.Domain
         public int TicketId { get; set; }
         public string TicketTitle { get; set; }
         public int ProjectId { get; set; }
-
+        public TicketAssginDeveloper()
+        {
+            Developers = new List<ApplicationUser>();
+        }
     }
 }

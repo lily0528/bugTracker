@@ -27,6 +27,8 @@ namespace bugTracker.Controllers
         public ActionResult Index()
         {
             //var userId = User.Identity.GetUserId();
+
+            //need set relationship in AutoMapperConfig
             var ticket = DbContext.Tickets.ToList();
             var model = Mapper.Map<List<IndexTicket>>(ticket);
             return View(model);
@@ -45,7 +47,7 @@ namespace bugTracker.Controllers
             return View();
         }
 
-
+        [Authorize(Roles = "Submitter")]
         [HttpGet]
         public ActionResult CreateTicket()
         {
@@ -58,6 +60,7 @@ namespace bugTracker.Controllers
             return View(model);
         }
 
+        [Authorize(Roles ="Submitter")]
         [HttpPost]
         public ActionResult CreateTicket(CreateTicket formData)
         {
@@ -76,6 +79,8 @@ namespace bugTracker.Controllers
             if (!id.HasValue)
             {
                 ticket = new Ticket();
+                var ticketStatus = DbContext.TicketStatuses.Where(p => p.Name == "Open").FirstOrDefault();
+                ticket.TicketStatusId = ticketStatus.Id;
                 ticket.Created = DateTime.Now;
                 DbContext.Tickets.Add(ticket);
             }
@@ -87,15 +92,17 @@ namespace bugTracker.Controllers
                 {
                     return HttpNotFound();
                 }
+                ticket.TicketStatusId = formData.TicketStatusId;
                 ticket.Updated = DateTime.Now;
             }
+            
             ticket.Title = formData.Title;
             ticket.Description = formData.Description;
             ticket.CreatedById = User.Identity.GetUserId();
             ticket.ProjectId = formData.ProjectId;
             ticket.TicketTypeId = formData.TicketTypeId;
             ticket.TicketPriorityId = formData.TicketPriorityId;
-            ticket.TicketStatusId = formData.TicketStatusId;
+           
             DbContext.SaveChanges();
             return RedirectToAction(nameof(TicketController.Index));
         }
@@ -154,6 +161,7 @@ namespace bugTracker.Controllers
             //var a = helper.GetRoles(project.Users[0].Id);
             var projectDeveloper = project.Users.Where(u => helper.GetRoles(u.Id).Contains("Developer")).ToList();
 
+            //var assignedTo = project.Tickets.FirstOrDefault(t => t.Id == 1).Comments.FirstOrDefault(c => c.Id == 2);
             //var projectDeveloper = project.Users.Where(u => helper.GetRoles(u.Id).Contains("Developer")).Select(p => p.UserName).ToList();
             //var developers = DbContext.Users.Where(p => p.Projects.Any(k => k.Id == id) && Users.IsInRole = "Developer").ToList();
             var model = new TicketAssginDeveloper

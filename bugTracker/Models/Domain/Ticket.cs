@@ -35,6 +35,8 @@ namespace bugTracker.Models
 
         public Ticket()
         {
+            Comments = new List<TicketComment>();
+            Attachments = new List<TicketAttachment>();
             Created = DateTime.Now;
         }
     }
