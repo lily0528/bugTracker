@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using bugTracker.Models;
 using bugTracker.Models.Domain;
+using bugTracker.Models.Filters;
 using bugTracker.Models.Helpers;
 using bugTracker.Models.ViewModels;
 using Microsoft.AspNet.Identity;
@@ -24,21 +25,45 @@ namespace bugTracker.Controllers
             //TicketHelper = new TicketHelper(DbContext);
         }
 
+        [Authorize]
         public ActionResult Index()
         {
-            //var userId = User.Identity.GetUserId();
+            var userId = User.Identity.GetUserId();
 
             //need set relationship in AutoMapperConfig
-            var ticket = DbContext.Tickets.ToList();
-            var model = Mapper.Map<List<IndexTicket>>(ticket);
+            var tickets = DbContext.Tickets.ToList();
+            var model = Mapper.Map<List<IndexTicket>>(tickets);
+
             return View(model);
         }
-
+        [Authorize(Roles = "Developer,Submitter")]
         public ActionResult FromProjects()
         {
             var userId = User.Identity.GetUserId();
-            var ticket = DbContext.Tickets.Where(p => p.Project.Users.Any(u => u.Id == userId)).ToList();
-            var model = Mapper.Map<List<IndexTicket>>(ticket);
+            var tickets = DbContext.Tickets.Where(p => p.Project.Users.Any(u => u.Id == userId) || p.CreatedById == userId).ToList();
+            var model = Mapper.Map<List<IndexTicket>>(tickets);
+            foreach (var ticket in model)
+            {
+                if ((ticket.AssignedToId == userId && User.IsInRole("Developer")) 
+                    || (ticket.CreatedById == userId && User.IsInRole("Submitter")))
+                {
+                    ticket.IfEdit = true;
+                }
+                else
+                {
+                    ticket.IfEdit = false;
+                }
+            }
+
+            return View(model);
+        }
+
+        [Authorize(Roles = "Developer,Submitter")]
+        public ActionResult MyTickets()
+        {
+            var userId = User.Identity.GetUserId();
+            var tickets = DbContext.Tickets.Where(p => p.CreatedById == userId || p.AssignedToId == userId).ToList();
+            var model = Mapper.Map<List<IndexTicket>>(tickets);
             return View(model);
         }
 
@@ -47,8 +72,24 @@ namespace bugTracker.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Submitter")]
+        public ActionResult Details(int? id)
+        {
+            var ticket = DbContext.Tickets.Where(p => p.Id == id).FirstOrDefault();
+            var model = Mapper.Map<IndexTicket>(ticket);
+            return View(model);
+            //var model = new Ticket
+            //{
+            //    Id = ticket.Id,
+            //    Title = ticket.Title,
+            //    Description = ticket.Description,
+            //    Created = ticket.Created,
+            //    Updated = ticket.Updated,
+            //    ProjectId = ticket.ProjectId,
+            //};
+
+        }
         [HttpGet]
+        [Authorize(Roles = "Submitter")]
         public ActionResult CreateTicket()
         {
             var userId = User.Identity.GetUserId();
@@ -60,8 +101,9 @@ namespace bugTracker.Controllers
             return View(model);
         }
 
-        [Authorize(Roles ="Submitter")]
+     
         [HttpPost]
+        [Authorize(Roles = "Submitter")]
         public ActionResult CreateTicket(CreateTicket formData)
         {
 
@@ -108,6 +150,7 @@ namespace bugTracker.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin, Project Manager, Submitter, Submitter")]
         public ActionResult EditTicket(int? id)
         {
             if (!id.HasValue)
@@ -134,6 +177,8 @@ namespace bugTracker.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        [Authorize(Roles = "Admin, Project Manager, Submitter, Submitter")]
         public ActionResult EditTicket(int? id, CreateTicket formData)
         {
             if (!id.HasValue)
@@ -148,6 +193,8 @@ namespace bugTracker.Controllers
         }
 
         [HttpGet]
+        //[MVCFiltersAuthorization(Roles = "Admin,Project Manager")]
+        [Authorize(Roles = "Admin,Project Manager")]
         public ActionResult AssignDeveloper(int id)
         {
             var ticket = DbContext.Tickets.FirstOrDefault(p => p.Id == id);
@@ -175,13 +222,14 @@ namespace bugTracker.Controllers
             return View(model);
         }
 
-
-        public ActionResult AssignDeveloper(int id, TicketAssginDeveloper formData)
+        [HttpPost]
+        [Authorize(Roles = "Admin,Project Manager")]
+        public ActionResult AssignDeveloper(int? id, TicketAssginDeveloper formData)
         {
-            //if (!id.HasValue)
-            //{
-            //    return RedirectToAction(nameof(TicketController.Index));
-            //}
+            if (!id.HasValue)
+            {
+                return RedirectToAction(nameof(TicketController.Index));
+            }
             var ticket = DbContext.Tickets.FirstOrDefault(p => p.Id == id);
 
             ticket.AssignedToId = formData.DeveloperId;

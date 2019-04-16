@@ -7,6 +7,8 @@ namespace bugTracker
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
+            //modified next
+            filters.Add(new AuthorizeAttribute());
             filters.Add(new HandleErrorAttribute());
         }
     }

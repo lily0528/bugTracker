@@ -109,18 +109,32 @@
                     </a>
                 </li>
             }
-            <li class="nav-item">
-                <a class="nav-link" href="@Url.Action("Index", "Ticket")">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>All Tickets</span>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>Ticket</span>
                 </a>
+                <div class="dropdown-menu" aria-labelledby="pagesDropdown" >
+                    @if (User.IsInRole("Submitter"))
+                    {
+                        <a class="dropdown-item" href="@Url.Action("CreateTicket", "Ticket")"><i class="fas fa-plus"></i>New Ticket</a>
+                    }
+                    @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+                    {
+                        <a class="dropdown-item" href="@Url.Action("Index", "Ticket")">All Tickets</a>
+                    }
+                    @if (User.IsInRole("Submitter") || User.IsInRole("Developer"))
+                    {
+                        <a class="dropdown-item" href="@Url.Action("FromProjects", "Ticket")">From Projects Tickets</a>
+                    }
+                    @if (User.IsInRole("Submitter") || User.IsInRole("Developer"))
+                    {
+                        <a class="dropdown-item" href="@Url.Action("MyTickets", "Ticket")">MyTickets</a>
+                    }
+                    </div>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="@Url.Action("FromProjects", "Ticket")">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>From Projects-Ticket</span>
-                </a>
-            </li>
+
 
         </ul>
 

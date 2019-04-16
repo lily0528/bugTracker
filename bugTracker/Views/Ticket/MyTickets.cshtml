@@ -1,9 +1,11 @@
-﻿@model List<IndexTicket>
+﻿
 @{
-    ViewBag.Title = "Index";
+                /**/
+
+                ViewBag.Title = "MyTickets";
 }
 
-<h2>Index</h2>
+<h2>MyTickets</h2>
 
 <div id="content-wrapper">
     <div class="container-fluid">
@@ -50,41 +52,36 @@
                         <tbody>
                             @foreach (var record in Model)
                             {
-                            <tr>
-                                <td>@record.ProjectName</td>
-                                <td> <a href="@Url.Action("Details", "Ticket", new { id = record.Id })">@record.Title</a></td>
-                                <td>@record.Created</td>
-                                <td>@record.Updated</td>
-                                <td>@record.TicketTypeName</td>
-                                <td>@record.TicketStatusName</td>
-                                <td>@record.TicketPriorityName</td>
-                                <td>@record.CreatedByName</td>
-                                @if (record.AssignedName == null)
-                                {
-                                    <td></td>
-                                }
-                                else
-                                {
-                                    <td>@record.AssignedName</td>
-                                }
+                                <tr>
+                                    <td>@record.ProjectName</td>
+                                    <td> <a href="@Url.Action("Details", "Ticket", new { id = record.Id })">@record.Title</a></td>
+                                    <td>@record.Created</td>
+                                    <td>@record.Updated</td>
+                                    <td>@record.TicketTypeName</td>
+                                    <td>@record.TicketStatusName</td>
+                                    <td>@record.TicketPriorityName</td>
+                                    <td>@record.CreatedByName</td>
+                                    @if (record.AssignedName == null)
+                                    {
+                                        <td></td>
+                                    }
+                                    else
+                                    {
+                                        <td>@record.AssignedName</td>
+                                    }
                                     <td>
+
                                         <a href="@Url.Action("EditTicket", "Ticket", new { id = record.Id })">
                                             <i class="far fa-edit"></i>
                                         </a>
-                                        @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
-                                        {
-                                            <a href="@Url.Action("AssignDeveloper", "Ticket", new { id = record.Id })">
-                                                <i class="fas fa-user"></i>
-                                            </a>
-                                        }
-                                            <a href="@Url.Action("CreateAttachment", "TicketAttachment", new { id = record.Id})">
-                                                <i class="fas fa-paperclip"></i>
-                                            </a>
-                                            <a href="@Url.Action("CreateComment", "TicketComment", new { id = record.Id})">
-                                                <i class="fas fa-comment"></i>
-                                            </a>
-                                        </td>
-                            </tr>
+                                        <a href="@Url.Action("CreateAttachment", "TicketAttachment", new { id = record.Id})">
+                                            <i class="fas fa-paperclip"></i>
+                                        </a>
+                                        <a href="@Url.Action("CreateComment", "TicketComment", new { id = record.Id})">
+                                            <i class="fas fa-comment"></i>
+                                        </a>
+                                    </td>
+                                </tr>
                             }
                         </tbody>
                     </table>
@@ -144,6 +141,4 @@
     <script src="~/js/demo/chart-area-demo.js"></script>
 
 }
-
-
 

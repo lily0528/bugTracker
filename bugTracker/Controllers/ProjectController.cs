@@ -42,7 +42,7 @@ namespace bugTracker.Controllers
                    Updated = p.Updated,
                    CountOfMembers = p.Users.Count(),
                    //Next task
-                   CountOfTickets = 0
+                   CountOfTickets = p.Tickets.Count()
                }).ToList();
             return View("ProjectList", model);
         }

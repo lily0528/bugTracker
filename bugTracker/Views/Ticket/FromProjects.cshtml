@@ -12,9 +12,9 @@
         <div class="card mb-3">
             @*@if (User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("Project Manager")))
                 {*@
-            <div class="card-header">
+            @*<div class="card-header">
                 <div><a class="btn btn-primary" href="@Url.Action("CreateTicket")">Create New</a></div>
-            </div>
+            </div>*@
             @*}*@
             <div class="card-body">
                 <div class="table-responsive">
@@ -22,7 +22,6 @@
                         <thead class="card-header">
                             <tr>
                                 <th>Project</th>
-                                <th>Id</th>
                                 <th>Title</th>
                                 <th>Created</th>
                                 <th>Updated</th>
@@ -37,7 +36,6 @@
                         <tfoot>
                             <tr>
                                 <th>Project</th>
-                                <th>Id</th>
                                 <th>Title</th>
                                 <th>Created</th>
                                 <th>Updated</th>
@@ -53,33 +51,37 @@
                             @foreach (var record in Model)
                             {
                                 <tr>
-                                    <td>@record.Project.Name</td>
-                                    <td>@record.Id</td>
+                                    <td>@record.ProjectName</td>
                                     <td>@record.Title</td>
                                     <td>@record.Created</td>
                                     <td>@record.Updated</td>
                                     <td>@record.TicketTypeName</td>
                                     <td>@record.TicketStatusName</td>
                                     <td>@record.TicketPriorityName</td>
-                                    <td>@record.CreatedBy.UserName</td>
+                                    <td>@record.CreatedByName</td>
                                     @*<td>@record.TicketType.Name</td>
                                         <td>@record.TicketStatus.Name</td>
                                         <td>@record.TicketPriority.Name</td>
                                         <td>@record.CreatedBy.UserName</td>*@
-                                    @if (record.AssignedTo == null)
+                                    @if (record.AssignedName == null)
                                     {
                                         <td></td>
                                     }
                                     else
                                     {
-                                        <td>@record.AssignedTo.UserName</td>
+                                        <td>@record.AssignedName</td>
                                     }
                                     <td>
+                                        @if (record.IfEdit == true) { 
                                         <a href="@Url.Action("EditTicket", "Ticket", new { id = record.Id })">
                                             <i class="far fa-edit"></i>
                                         </a>
-                                        <a href="@Url.Action("EditTicket", "Ticket", new { id = record.Id })">
-                                            <i class="fas fa-user"></i>
+                                        }
+                                        <a href="@Url.Action("CreateAttachment", "TicketAttachment", new { id = record.Id, projectId = record.ProjectId})">
+                                            <i class="fas fa-paperclip"></i>
+                                        </a>
+                                        <a href="@Url.Action("CreateComment", "TicketComment", new { id = record.Id})">
+                                            <i class="fas fa-comment"></i>
                                         </a>
                                     </td>
                                 </tr>

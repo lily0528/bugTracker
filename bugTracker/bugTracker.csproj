@@ -188,6 +188,7 @@
     <Compile Include="Controllers\TicketCommentController.cs" />
     <Compile Include="Controllers\TicketController.cs" />
     <Compile Include="Models\Constants.cs" />
+    <Compile Include="Models\Filters\MVCFiltersAuthorization.cs" />
     <Compile Include="Models\ViewModels\CreateComment.cs" />
     <Compile Include="Models\ViewModels\CreateTicketAttachment.cs" />
     <Compile Include="Models\ViewModels\TicketAssginDeveloper.cs" />
@@ -1527,6 +1528,8 @@
     <Content Include="Views\TicketAttachment\Index.cshtml" />
     <Content Include="Views\TicketAttachment\CreateAttachment.cshtml" />
     <Content Include="Views\TicketComment\CreateComment.cshtml" />
+    <Content Include="Views\Ticket\Details.cshtml" />
+    <Content Include="Views\Ticket\MyTickets.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

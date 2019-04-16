@@ -14,6 +14,7 @@ namespace bugTracker.Models.ViewModels
         [StringLength(100, MinimumLength = 4, ErrorMessage = "The {0} must be between {2} and {1} characters.")]
         public string Title { get; set; }
         [Required]
+        [StringLength(1000, MinimumLength = 1, ErrorMessage = "The {0} cannot exceed {2} characters.")]
         public string Description { get; set; }
         public int ProjectId { get; set; }
         public int TicketTypeId { get; set; }
