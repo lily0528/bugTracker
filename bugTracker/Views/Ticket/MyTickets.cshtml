@@ -1,8 +1,8 @@
-﻿
+﻿@model List<IndexTicket>
 @{
-                /**/
+    /**/
 
-                ViewBag.Title = "MyTickets";
+    ViewBag.Title = "MyTickets";
 }
 
 <h2>MyTickets</h2>
@@ -15,8 +15,8 @@
             @*@if (User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("Project Manager")))
                 {*@
             @*<div class="card-header">
-                <div><a class="btn btn-primary" href="@Url.Action("CreateTicket")">Create New</a></div>
-            </div>*@
+                    <div><a class="btn btn-primary" href="@Url.Action("CreateTicket")">Create New</a></div>
+                </div>*@
             @*}*@
             <div class="card-body">
                 <div class="table-responsive">
@@ -87,7 +87,7 @@
                     </table>
                 </div>
             </div>
-            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+            <div class="card-footer small text-muted">@DateTime.Now</div>
         </div>
     </div>
     <!-- /.container-fluid -->

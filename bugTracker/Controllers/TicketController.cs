@@ -40,11 +40,11 @@ namespace bugTracker.Controllers
         public ActionResult FromProjects()
         {
             var userId = User.Identity.GetUserId();
-            var tickets = DbContext.Tickets.Where(p => p.Project.Users.Any(u => u.Id == userId) || p.CreatedById == userId).ToList();
+            var tickets = DbContext.Tickets.Where(p => p.Project.Users.Any(u => u.Id == userId) || p.CreatedById == userId || p.AssignedToId == userId).ToList();
             var model = Mapper.Map<List<IndexTicket>>(tickets);
             foreach (var ticket in model)
             {
-                if ((ticket.AssignedToId == userId && User.IsInRole("Developer")) 
+                if ((ticket.AssignedToId == userId && User.IsInRole("Developer"))
                     || (ticket.CreatedById == userId && User.IsInRole("Submitter")))
                 {
                     ticket.IfEdit = true;
@@ -54,7 +54,6 @@ namespace bugTracker.Controllers
                     ticket.IfEdit = false;
                 }
             }
-
             return View(model);
         }
 
@@ -101,7 +100,7 @@ namespace bugTracker.Controllers
             return View(model);
         }
 
-     
+
         [HttpPost]
         [Authorize(Roles = "Submitter")]
         public ActionResult CreateTicket(CreateTicket formData)
@@ -123,6 +122,7 @@ namespace bugTracker.Controllers
                 ticket = new Ticket();
                 var ticketStatus = DbContext.TicketStatuses.Where(p => p.Name == "Open").FirstOrDefault();
                 ticket.TicketStatusId = ticketStatus.Id;
+                ticket.CreatedById = User.Identity.GetUserId();
                 ticket.Created = DateTime.Now;
                 DbContext.Tickets.Add(ticket);
             }
@@ -137,20 +137,26 @@ namespace bugTracker.Controllers
                 ticket.TicketStatusId = formData.TicketStatusId;
                 ticket.Updated = DateTime.Now;
             }
-            
+
             ticket.Title = formData.Title;
             ticket.Description = formData.Description;
-            ticket.CreatedById = User.Identity.GetUserId();
             ticket.ProjectId = formData.ProjectId;
             ticket.TicketTypeId = formData.TicketTypeId;
             ticket.TicketPriorityId = formData.TicketPriorityId;
-           
+
             DbContext.SaveChanges();
-            return RedirectToAction(nameof(TicketController.Index));
+            if (User.IsInRole("Submitter") || User.IsInRole("Developer"))
+            {
+                return RedirectToAction(nameof(TicketController.FromProjects));
+            }
+            else
+            {
+                return RedirectToAction(nameof(TicketController.Index));
+            }
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin, Project Manager, Submitter, Submitter")]
+        [Authorize(Roles = "Admin, Project Manager, Submitter, Developer")]
         public ActionResult EditTicket(int? id)
         {
             if (!id.HasValue)
@@ -159,13 +165,22 @@ namespace bugTracker.Controllers
             }
             var userId = User.Identity.GetUserId();
             var ticket = DbContext.Tickets.Where(p => p.Id == id).FirstOrDefault();
-            var assignedProjetcs = DbContext.Projects.Where(p => p.Users.Any(u => u.Id == userId)).ToList();
+            List<Project> selectProjects;
+            if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+            {
+                selectProjects = DbContext.Projects.ToList();
+            }
+            else
+            {
+                selectProjects = DbContext.Projects.Where(p => p.Users.Any(u => u.Id == userId)).ToList();
+            }
+
             var model = new EditTicket
             {
                 Id = id.Value,
                 Title = ticket.Title,
                 Description = ticket.Description,
-                Project = new SelectList(assignedProjetcs, "Id", "Name"),
+                Project = new SelectList(selectProjects, "Id", "Name"),
                 TicketType = new SelectList(DbContext.TicketTypes, "Id", "Name"),
                 TicketPriority = new SelectList(DbContext.TicketPriorities, "Id", "Name"),
                 TicketStatus = new SelectList(DbContext.TicketStatuses, "Id", "Name"),
@@ -178,7 +193,7 @@ namespace bugTracker.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin, Project Manager, Submitter, Submitter")]
+        [Authorize(Roles = "Admin, Project Manager, Submitter, Developer")]
         public ActionResult EditTicket(int? id, CreateTicket formData)
         {
             if (!id.HasValue)

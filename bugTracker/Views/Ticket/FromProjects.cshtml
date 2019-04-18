@@ -13,8 +13,8 @@
             @*@if (User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("Project Manager")))
                 {*@
             @*<div class="card-header">
-                <div><a class="btn btn-primary" href="@Url.Action("CreateTicket")">Create New</a></div>
-            </div>*@
+                    <div><a class="btn btn-primary" href="@Url.Action("CreateTicket")">Create New</a></div>
+                </div>*@
             @*}*@
             <div class="card-body">
                 <div class="table-responsive">
@@ -52,7 +52,7 @@
                             {
                                 <tr>
                                     <td>@record.ProjectName</td>
-                                    <td>@record.Title</td>
+                                    <td> <a href="@Url.Action("Details", "Ticket", new { id = record.Id })">@record.Title</a></td>
                                     <td>@record.Created</td>
                                     <td>@record.Updated</td>
                                     <td>@record.TicketTypeName</td>
@@ -72,17 +72,18 @@
                                         <td>@record.AssignedName</td>
                                     }
                                     <td>
-                                        @if (record.IfEdit == true) { 
-                                        <a href="@Url.Action("EditTicket", "Ticket", new { id = record.Id })">
-                                            <i class="far fa-edit"></i>
-                                        </a>
+                                        @if (record.IfEdit == true)
+                                        {
+                                            <a href="@Url.Action("EditTicket", "Ticket", new { id = record.Id })">
+                                                <i class="far fa-edit"></i>
+                                            </a>
                                         }
                                         <a href="@Url.Action("CreateAttachment", "TicketAttachment", new { id = record.Id, projectId = record.ProjectId})">
-                                            <i class="fas fa-paperclip"></i>
-                                        </a>
-                                        <a href="@Url.Action("CreateComment", "TicketComment", new { id = record.Id})">
-                                            <i class="fas fa-comment"></i>
-                                        </a>
+                                                <i class="fas fa-paperclip"></i>
+                                            </a>
+                                            <a href="@Url.Action("CreateComment", "TicketComment", new { id = record.Id})">
+                                                <i class="fas fa-comment"></i>
+                                            </a>
                                     </td>
                                 </tr>
                             }
@@ -90,7 +91,7 @@
                     </table>
                 </div>
             </div>
-            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+            <div class="card-footer small text-muted">@DateTime.Now</div>
         </div>
     </div>
     <!-- /.container-fluid -->

@@ -1,26 +1,38 @@
 ﻿@model CreateTicketAttachment
 @{
     ViewBag.Title = "CreateAttachment";
+   
 }
 
-<h2>CreateAttachment</h2>
-<div class="col-12 col-lg-9">
-    @if (Model != null)
-    {   
-        <div><span><strong>TicketId:</strong></span>@Model.TicketId</div>
-    }
-    <form method="post" enctype="multipart/form-data">
-        <div class="form-group">
-            @Html.LabelFor(p => p.Description, "Ticket Attachment:")
-            @Html.TextBoxFor(p => p.Description, new { @class = "form-control", placeholder = "Description" })
-            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            @if (Model.IfEdit)
+            {
+                <div class="card-header">
+                    <i class="fas fa-chart-area"></i>
+                    Create Comment
+                </div>
+                <div class="card-body">
+                    <div><span><strong>Ticket Id:</strong></span>@Model.TicketId</div>
+                    <div><span><strong>Ticket Title:</strong></span>@Model.TicketTitle</div>
+                    <form method="post" enctype="multipart/form-data">
+                        @Html.ValidationSummary(false)
+                        <div class="form-group">
+                            @Html.LabelFor(p => p.Description, "Ticket Attachment:")
+                            @Html.TextBoxFor(p => p.Description, new { @class = "form-control", placeholder = "Description" })
+                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            <input type="file" name="Media" />
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                    <div class="dropdown-divider"></div>
+                </div>
+            }
+            @Html.Action("Index", "TicketAttachment", new { id = Model.TicketId })
         </div>
-        <div class="form-group">
-            <input type="file" name="Media" />
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-    @*@Html.Hidden("TicketId", Model.ToString())
-    @Html.Hidden("ProjectId")*@
-    @Html.Action("Index", "TicketAttachment", new { id = Model.TicketId })
+    </div>
 </div>
+

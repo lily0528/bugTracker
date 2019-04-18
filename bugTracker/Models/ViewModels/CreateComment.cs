@@ -17,6 +17,8 @@ namespace bugTracker.Models.ViewModels
         public int TicketId { get; set; }
         //public virtual Ticket Ticket { get; set; }
         public string CreatorId { get; set; }
+        public bool IfEdit { get; set; }
+        public string TicketTitle { get; set; }
         //public virtual ApplicationUser Creator { get; set; }
     }
 }

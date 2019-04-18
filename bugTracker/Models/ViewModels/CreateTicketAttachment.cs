@@ -14,5 +14,7 @@ namespace bugTracker.Models.ViewModels
         public HttpPostedFileBase Media { get; set; }
         public string CreatorId { get; set; }
         public string Creator { get; set; }
+        public string TicketTitle { get; set; }
+        public bool IfEdit { get; set; }
     }
 }

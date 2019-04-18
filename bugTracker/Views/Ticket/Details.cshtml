@@ -4,89 +4,93 @@
 }
 
 <div class="row">
-    <div class="col-lg-10">
-        <h1>
-            @Html.DisplayFor(p => p.Title)
-        </h1>
-        <span class="text-muted">
-            <strong>@Html.DisplayNameFor(p => p.ProjectName):</strong> @Html.DisplayFor(p => p.ProjectName)
-        </span>
-    </div>
-</div>
+    <div class="col-lg-11">
+        <div class="card mb-8">
+            <div class="card-header">
+                <i class="fas fa-chart-area"></i>
+                Ticket Details
+            </div>
+            <h6>
+                &emsp;@Html.LabelFor(p => p.Title, "Ticket Title:") @Html.DisplayFor(p => p.Title)
+            </h6>
+            <h6>
+                &emsp;@Html.LabelFor(p => p.ProjectName, "Project Name:") @Html.DisplayFor(p => p.ProjectName)
+            </h6>
 
-<div>
-    <div class="card col-lg-11">
-        <table class="table align-items-baseline">
-            <tbody>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(p => p.Id):
-                    </th>
-                    <td>
-                        @Html.DisplayFor(p => p.Id)
-                    </td>
-                    <th>
-                        @Html.DisplayNameFor(p => p.AssignedName):
-                    </th>
-                    <td>
-                        @Html.DisplayFor(p => p.AssignedName)
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(p => p.CreatedByName):
-                    </th>
-                    <td>
-                        @Html.DisplayFor(p => p.CreatedByName)
-                    </td>
-                    <th>
-                        @Html.DisplayNameFor(p => p.Created):
-                    </th>
-                    <td>
-                        @Model.Created.ToString("yy-MM-dd"))
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(p => p.Updated):
-                    </th>
-                    <td>
-                        @(Model.Updated?.ToString("yy-MM-dd"))
-                    </td>
-                    <th>
-                        @Html.DisplayNameFor(p => p.TicketTypeName):
-                    </th>
-                    <td>
-                        @Html.DisplayFor(p => p.TicketTypeName)
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(p => p.TicketPriorityName):
-                    </th>
-                    <td>
-                        @Html.DisplayFor(p => p.TicketPriorityName)
-                    </td>
-                    <th>
-                        @Html.DisplayNameFor(p => p.TicketStatusName):
-                    </th>
-                    <td>
-                        @Html.DisplayFor(p => p.TicketStatusName)
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(p => p.Description):
-                    </th>
-                    <td>
-                        @Html.DisplayFor(p => p.Description)
-                    </td>
-                    <th></th>
-                    <td></td>
-                </tr>
-            </tbody>
-        </table>
-        @Html.Action("Index", "TicketAttachment", new { id = Model.Id })
-        @Html.Action("Index", "TicketComment", new { id = Model.Id })
+            <table class="table align-items-baseline">
+                <tbody>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(p => p.Id):
+                        </th>
+                        <td>
+                            @Html.DisplayFor(p => p.Id)
+                        </td>
+                        <th>
+                            @Html.DisplayNameFor(p => p.AssignedName):
+                        </th>
+                        <td>
+                            @Html.DisplayFor(p => p.AssignedName)
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(p => p.CreatedByName):
+                        </th>
+                        <td>
+                            @Html.DisplayFor(p => p.CreatedByName)
+                        </td>
+                        <th>
+                            @Html.DisplayNameFor(p => p.Created):
+                        </th>
+                        <td>
+                            @Model.Created.ToString("yy-MM-dd"))
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(p => p.Updated):
+                        </th>
+                        <td>
+                            @(Model.Updated?.ToString("yy-MM-dd"))
+                        </td>
+                        <th>
+                            @Html.DisplayNameFor(p => p.TicketTypeName):
+                        </th>
+                        <td>
+                            @Html.DisplayFor(p => p.TicketTypeName)
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(p => p.TicketPriorityName):
+                        </th>
+                        <td>
+                            @Html.DisplayFor(p => p.TicketPriorityName)
+                        </td>
+                        <th>
+                            @Html.DisplayNameFor(p => p.TicketStatusName):
+                        </th>
+                        <td>
+                            @Html.DisplayFor(p => p.TicketStatusName)
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(p => p.Description):
+                        </th>
+                        <td>
+                            @Html.DisplayFor(p => p.Description)
+                        </td>
+                        <th></th>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+            @Html.Action("Index", "TicketAttachment", new { id = Model.Id })
+            @Html.Action("Index", "TicketComment", new { id = Model.Id })
+            @*@Html.Action("CreateAttachment", "TicketAttachment", new { id = Model.Id })
+        @Html.Action("CreateComment", "TicketComment", new { id = Model.Id })*@
+        </div>
     </div>
 </div>

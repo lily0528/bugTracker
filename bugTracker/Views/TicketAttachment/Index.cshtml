@@ -3,9 +3,12 @@
     ViewBag.Title = "Index";
     Layout = null;
 }
+<div class="card-header">
+    <i class="fas fa-list-ul"></i>
+    Attachment List
+</div>
     <div class="card-body">
         <div class="table-responsive">
-            <h5>Attachment List</h5>
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead class="card-header">
                     <tr>
@@ -13,6 +16,7 @@
                         <th>Description</th>
                         <th>FileUrl</th>
                         <th>Creator</th>
+                        <th>Description</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -23,6 +27,11 @@
                             <td>@record.Description</td>
                             <td>@record.FileUrl</td>
                             <td>@record.Creator.DisplayName</td>
+                            <td>
+                                <a href="@Url.Content(record.FileUrl)">
+                                    @Html.DisplayFor(m => record.Description)
+                                </a>
+                            </td>
                         </tr>
                     }
                 </tbody>

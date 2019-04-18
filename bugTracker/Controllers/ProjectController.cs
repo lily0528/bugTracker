@@ -41,7 +41,6 @@ namespace bugTracker.Controllers
                    Created = p.Created,
                    Updated = p.Updated,
                    CountOfMembers = p.Users.Count(),
-                   //Next task
                    CountOfTickets = p.Tickets.Count()
                }).ToList();
             return View("ProjectList", model);
@@ -61,8 +60,7 @@ namespace bugTracker.Controllers
                    Created = p.Created,
                    Updated = p.Updated,
                    CountOfMembers = p.Users.Count(),
-                  //Next task
-                   CountOfTickets = 0
+                   CountOfTickets = p.Tickets.Count()
                }).ToList();
             return View("myProject", model);
         }

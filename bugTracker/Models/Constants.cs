@@ -8,7 +8,7 @@ namespace bugTracker.Models
     public class Constants
     {
         public static readonly List<string> AllowedFileExtensions =
-   new List<string> { ".jpg", ".jpeg", ".png" };
+   new List<string> { ".jpg", ".jpeg", ".png" , ".pdf", ".doc",".docx"};
 
         public static readonly string UploadFolder = "~/Upload/";
 
