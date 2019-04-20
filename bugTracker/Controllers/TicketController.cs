@@ -8,6 +8,7 @@ using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -25,7 +26,7 @@ namespace bugTracker.Controllers
             //TicketHelper = new TicketHelper(DbContext);
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin, Project Manager")]
         public ActionResult Index()
         {
             var userId = User.Identity.GetUserId();
@@ -36,6 +37,7 @@ namespace bugTracker.Controllers
 
             return View(model);
         }
+
         [Authorize(Roles = "Developer,Submitter")]
         public ActionResult FromProjects()
         {
@@ -71,22 +73,22 @@ namespace bugTracker.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin, Project Manager, Submitter, Developer")]
         public ActionResult Details(int? id)
         {
+            if (!id.HasValue)
+            {
+                return RedirectToAction(nameof(HomeController.Index));
+            }
             var ticket = DbContext.Tickets.Where(p => p.Id == id).FirstOrDefault();
+            if (ticket == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
             var model = Mapper.Map<IndexTicket>(ticket);
             return View(model);
-            //var model = new Ticket
-            //{
-            //    Id = ticket.Id,
-            //    Title = ticket.Title,
-            //    Description = ticket.Description,
-            //    Created = ticket.Created,
-            //    Updated = ticket.Updated,
-            //    ProjectId = ticket.ProjectId,
-            //};
-
         }
+
         [HttpGet]
         [Authorize(Roles = "Submitter")]
         public ActionResult CreateTicket()
@@ -99,7 +101,6 @@ namespace bugTracker.Controllers
             model.TicketPriority = new SelectList(DbContext.TicketPriorities.ToList(), "Id", "Name");
             return View(model);
         }
-
 
         [HttpPost]
         [Authorize(Roles = "Submitter")]
@@ -119,8 +120,8 @@ namespace bugTracker.Controllers
             Ticket ticket;
             if (!id.HasValue)
             {
-                ticket = new Ticket();
                 var ticketStatus = DbContext.TicketStatuses.Where(p => p.Name == "Open").FirstOrDefault();
+                ticket = new Ticket();
                 ticket.TicketStatusId = ticketStatus.Id;
                 ticket.CreatedById = User.Identity.GetUserId();
                 ticket.Created = DateTime.Now;
@@ -137,7 +138,6 @@ namespace bugTracker.Controllers
                 ticket.TicketStatusId = formData.TicketStatusId;
                 ticket.Updated = DateTime.Now;
             }
-
             ticket.Title = formData.Title;
             ticket.Description = formData.Description;
             ticket.ProjectId = formData.ProjectId;
@@ -233,7 +233,6 @@ namespace bugTracker.Controllers
                 ProjectId = ticket.ProjectId,
                 DeveloperList = new SelectList(projectDeveloper, "Id", "UserName")
             };
-
             return View(model);
         }
 
