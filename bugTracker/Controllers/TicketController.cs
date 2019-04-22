@@ -44,6 +44,8 @@ namespace bugTracker.Controllers
             var userId = User.Identity.GetUserId();
             var tickets = DbContext.Tickets.Where(p => p.Project.Users.Any(u => u.Id == userId) || p.CreatedById == userId || p.AssignedToId == userId).ToList();
             var model = Mapper.Map<List<IndexTicket>>(tickets);
+
+            //Assign a status that each role can edit
             foreach (var ticket in model)
             {
                 if ((ticket.AssignedToId == userId && User.IsInRole("Developer"))
@@ -220,12 +222,7 @@ namespace bugTracker.Controllers
             var project = DbContext.Projects.Where(p => p.Id == ticket.ProjectId).FirstOrDefault();
             var helper = new UserRoleHelper(DbContext);
             // Search developer from project when role is developer
-            //var a = helper.GetRoles(project.Users[0].Id);
             var projectDeveloper = project.Users.Where(u => helper.GetRoles(u.Id).Contains("Developer")).ToList();
-
-            //var assignedTo = project.Tickets.FirstOrDefault(t => t.Id == 1).Comments.FirstOrDefault(c => c.Id == 2);
-            //var projectDeveloper = project.Users.Where(u => helper.GetRoles(u.Id).Contains("Developer")).Select(p => p.UserName).ToList();
-            //var developers = DbContext.Users.Where(p => p.Projects.Any(k => k.Id == id) && Users.IsInRole = "Developer").ToList();
             var model = new TicketAssginDeveloper
             {
                 TicketTitle = ticket.Title,

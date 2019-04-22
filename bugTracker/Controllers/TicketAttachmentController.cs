@@ -25,9 +25,11 @@ namespace bugTracker.Controllers
         {
             DbContext = new ApplicationDbContext();
         }
+
+        [HttpGet]
         public ActionResult Index(int? id)
         {
-            //Todo:judge id  check again
+        
             if (!id.HasValue)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);

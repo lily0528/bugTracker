@@ -39,6 +39,7 @@ namespace bugTracker.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Project Manager,Submitter,Developer")]
         public ActionResult CreateComment(int? id)
         {
             if (!id.HasValue)
@@ -72,6 +73,7 @@ namespace bugTracker.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Project Manager,Submitter,Developer")]
         public ActionResult CreateComment(int? id, CreateComment formData)
         {
             if (!id.HasValue)
