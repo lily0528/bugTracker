@@ -18,6 +18,8 @@
                     <th>Updated</th>
                     <th>TicketId</th>
                     <th>Creator</th>
+                    <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -30,6 +32,8 @@
                         <td>@record.Updated</td>
                         <td>@record.TicketId</td>
                         <td>@record.Creator.DisplayName</td>
+                        <td><a href="@Url.Action("EditComment","TicketComment", new {id = record.Id })">Edit</a></td>
+                        <td><a href="@Url.Action("DeleteComment","TicketComment", new {id = record.Id })">Delete</a></td>
                     </tr>
                 }
             </tbody>

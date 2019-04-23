@@ -189,8 +189,9 @@
     <Compile Include="Controllers\TicketController.cs" />
     <Compile Include="Models\Constants.cs" />
     <Compile Include="Models\Filters\MVCFiltersAuthorization.cs" />
-    <Compile Include="Models\ViewModels\CreateComment.cs" />
-    <Compile Include="Models\ViewModels\CreateTicketAttachment.cs" />
+    <Compile Include="Models\CommentView\CreateComment.cs" />
+    <Compile Include="Models\AttachmentView\CreateTicketAttachment.cs" />
+    <Compile Include="Models\ViewModels\DashboardView.cs" />
     <Compile Include="Models\ViewModels\TicketAssginDeveloper.cs" />
     <Compile Include="Models\Helpers\AutoMapperConfig.cs" />
     <Compile Include="Models\Helpers\TicketHelper.cs" />
@@ -220,8 +221,8 @@
     <Compile Include="Models\ViewModels\EditMemberProject.cs" />
     <Compile Include="Models\ViewModels\EditProject.cs" />
     <Compile Include="Models\ViewModels\IndexProject.cs" />
-    <Compile Include="Models\ViewModels\TicketAttachmentView.cs" />
-    <Compile Include="Models\ViewModels\TicketCommentView.cs" />
+    <Compile Include="Models\AttachmentView\TicketAttachmentView.cs" />
+    <Compile Include="Models\CommentView\TicketCommentView.cs" />
     <Compile Include="Models\ViewModels\UserRole.cs" />
     <Compile Include="Models\ViewModels\EditUserRole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -1328,6 +1329,7 @@
     <Content Include="vendor\fontawesome-free\svgs\solid\i-cursor.svg" />
     <Content Include="vendor\fontawesome-free\svgs\solid\ice-cream.svg" />
     <Content Include="Views\Home\gulpfile.js" />
+    <Content Include="Views\Account\DemoLogin.cshtml" />
     <None Include="Views\Home\Index.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -1530,6 +1532,7 @@
     <Content Include="Views\TicketComment\CreateComment.cshtml" />
     <Content Include="Views\Ticket\Details.cshtml" />
     <Content Include="Views\Ticket\MyTickets.cshtml" />
+    <Content Include="Views\TicketComment\EditComment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

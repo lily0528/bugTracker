@@ -52,6 +52,12 @@ namespace bugTracker.Controllers
             }
         }
 
+        [AllowAnonymous]
+        public ActionResult DemoLogin()
+        {
+             return View();
+        }
+
         //
         // GET: /Account/Login
         [AllowAnonymous]

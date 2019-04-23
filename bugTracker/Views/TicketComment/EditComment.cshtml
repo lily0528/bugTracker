@@ -1,0 +1,34 @@
+﻿@model CreateComment
+@{
+    ViewBag.Title = "EditComment";
+
+}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            @if (Model.IfEdit)
+            {
+                <div class="card-header">
+                    <i class="fas fa-chart-area"></i>
+                    Edit Comment
+                </div>
+                <div class="card-body">
+                    <div><span><strong>TicketId:</strong></span>@Model.TicketId</div>
+                    <div><span><strong>Ticket Title:</strong></span>@Model.TicketTitle</div>
+                    <form method="post" enctype="multipart/form-data">
+                        @Html.ValidationSummary(false)
+                        @Html.HiddenFor(Model => Model.Id)
+                        <div class="form-group">
+                            @Html.LabelFor(p => p.Comment, "Ticket Comment:")
+                            @Html.TextAreaFor(p => p.Comment, new { @class = "form-control", placeholder = "Comment", rows = 5, columns = 20 })
+                            @Html.ValidationMessageFor(input => input.Comment, "", new { @class = "text-danger" })
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                    <div class="dropdown-divider"></div>
+                </div>
+            }
+            @Html.Action("Index", "TicketComment", new { id = Model.TicketId })
+        </div>
+    </div>
+</div>

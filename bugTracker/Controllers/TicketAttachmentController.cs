@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using bugTracker.Models;
 using bugTracker.Models.Domain;
-using bugTracker.Models.ViewModels;
+using bugTracker.Models.AttachmentView;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
@@ -20,6 +20,7 @@ namespace bugTracker.Controllers
 
         private ApplicationDbContext DbContext;
         private bool editStatus;
+       
 
         public TicketAttachmentController()
         {
@@ -29,7 +30,7 @@ namespace bugTracker.Controllers
         [HttpGet]
         public ActionResult Index(int? id)
         {
-        
+
             if (!id.HasValue)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -82,17 +83,17 @@ namespace bugTracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            if (!ModelState.IsValid)
-            {
-                return View();
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    return View();
+            //}
             var ticket = DbContext.Tickets.FirstOrDefault(p => p.Id == id);
             if (ticket == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var userId = User.Identity.GetUserId();
-            if ((User.Identity.IsAuthenticated && User.IsInRole("Admin") && User.IsInRole("Project Manager"))
+            if ((User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("Project Manager")))
                  || (User.Identity.IsAuthenticated && User.IsInRole("Submitter") && ticket.CreatedById == userId)
                  || (User.Identity.IsAuthenticated && User.IsInRole("Developer") && ticket.AssignedToId == userId))
             {
@@ -135,5 +136,41 @@ namespace bugTracker.Controllers
                 return RedirectToAction("CreateAttachment", "TicketAttachment");
             }
         }
+
+        public ActionResult AttachmentDelete(int? id)
+        {
+            if (!id.HasValue)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var attachment = DbContext.TicketAttachments.Where(p => p.Id == id).FirstOrDefault();
+            if (attachment == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var userId = User.Identity.GetUserId();
+            if ((User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("Project Manager")))
+             || ((User.Identity.IsAuthenticated && (User.IsInRole("Submitter") || User.IsInRole("Developer")))
+             && attachment.CreatorId == userId))
+            {
+                DbContext.TicketAttachments.Remove(attachment);
+                DbContext.SaveChanges();
+            }
+            return RedirectToAction("CreateAttachment", "TicketAttachment", new { id = attachment.TicketId });
+        }
+
+        //[HttpGet]
+        //public ActionResult AttachmentEdit(int?id)
+        //{
+        //    if (!id.HasValue)
+        //    {
+        //        return View();
+        //    }
+        //    var TicketAttachment = DbContext.TicketAttachments.Where(p => p.Id == id).FirstOrDefault();
+        //    var model = Mapper.Map<EditTicketAttachment>(TicketAttachment);
+        //    return View(model);
+        //}
+
+
     }
 }

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using bugTracker.Models;
 using bugTracker.Models.Domain;
-using bugTracker.Models.ViewModels;
+using bugTracker.Models.CommentView;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
@@ -87,7 +87,7 @@ namespace bugTracker.Controllers
             {
                 return HttpNotFound();
             };
-            if ((User.Identity.IsAuthenticated && User.IsInRole("Admin") && User.IsInRole("Project Manager"))
+            if ((User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("Project Manager")))
               || (User.Identity.IsAuthenticated && User.IsInRole("Submitter") && ticket.CreatedById == userId)
               || (User.Identity.IsAuthenticated && User.IsInRole("Developer") && ticket.AssignedToId == userId))
             {
@@ -106,6 +106,72 @@ namespace bugTracker.Controllers
             {
                 return RedirectToAction("CreateComment", "TicketComment");
             }
+        }
+
+        [HttpGet]
+        public ActionResult EditComment(int? id)
+        {
+            if (!id.HasValue)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var userId = User.Identity.GetUserId();
+            var ticketComment = DbContext.TicketComments.Where(p => p.Id == id).FirstOrDefault();
+            var ticket = DbContext.Tickets.FirstOrDefault(p => p.Id == ticketComment.TicketId);
+            if ((User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("Project Manager")))
+              || ((User.Identity.IsAuthenticated && (User.IsInRole("Submitter") || User.IsInRole("Developer")))
+              && ticketComment.CreatorId == userId))
+            {
+                var model = new CreateComment
+                {
+                    TicketId = ticketComment.TicketId,
+                    TicketTitle = ticket.Title,
+                    Comment = ticketComment.Comment,
+                    Id = ticketComment.Id,
+                    IfEdit = true
+                };
+                return View(model);
+            }
+            else
+            {
+                return RedirectToAction("CreateComment", "TicketComment", new { id = ticketComment.TicketId });
+            }
+        }
+
+        [HttpPost]
+        public ActionResult EditComment(CreateComment formdata)
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("CreateComment", "TicketComment", new { id = formdata.TicketId });
+            }
+            var ticketComment = DbContext.TicketComments.Where(p => p.Id == formdata.Id).FirstOrDefault();
+            ticketComment.Comment = formdata.Comment;
+            ticketComment.Updated = DateTime.Now;
+            DbContext.SaveChanges();
+            return RedirectToAction("CreateComment", "TicketComment", new { id = ticketComment.TicketId });
+        }
+
+        public ActionResult DeleteComment(int? id)
+        {
+            if (!id.HasValue)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var ticketComment = DbContext.TicketComments.Where(p => p.Id == id).FirstOrDefault();
+            if (ticketComment == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var userId = User.Identity.GetUserId();
+            if ((User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("Project Manager")))
+               || ((User.Identity.IsAuthenticated && (User.IsInRole("Submitter") || User.IsInRole("Developer")))
+                && ticketComment.CreatorId == userId))
+            {
+                DbContext.TicketComments.Remove(ticketComment);
+                DbContext.SaveChanges();
+            }
+            return RedirectToAction("CreateComment", "TicketComment", new { id = ticketComment.TicketId });
         }
     }
 }
