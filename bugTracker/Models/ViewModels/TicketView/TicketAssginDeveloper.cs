@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace bugTracker.Models.Domain
+namespace bugTracker.Models.ViewModels.TicketView
 {
     public class TicketAssginDeveloper
     {

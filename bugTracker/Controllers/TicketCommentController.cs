@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using bugTracker.Models;
-using bugTracker.Models.CommentView;
 using bugTracker.Models.Domain;
 using bugTracker.Models.ViewModels.CommentView;
 using Microsoft.AspNet.Identity;
@@ -39,7 +38,8 @@ namespace bugTracker.Controllers
             var model = Mapper.Map<List<TicketCommentView>>(ticketComments);
             foreach (var ticketComment in model)
             {
-                if (ticketComment.CreatorId == userId && (User.IsInRole("Developer") || User.IsInRole("Submitter")))
+                if (User.IsInRole("Admin") || User.IsInRole("Project Manager") || ((User.IsInRole("Developer") )
+              || (User.IsInRole("Submitter"))&& ticketComment.CreatorId == userId))
 
                 {
                     ticketComment.IfEdit = true;
@@ -143,9 +143,8 @@ namespace bugTracker.Controllers
             var userId = User.Identity.GetUserId();
             var ticketComment = DbContext.TicketComments.Where(p => p.Id == id).FirstOrDefault();
             var ticket = DbContext.Tickets.FirstOrDefault(p => p.Id == ticketComment.TicketId);
-            if ((User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("Project Manager")))
-              || ((User.Identity.IsAuthenticated && (User.IsInRole("Submitter") || User.IsInRole("Developer")))
-              && ticketComment.CreatorId == userId))
+            if (User.IsInRole("Admin") || User.IsInRole("Project Manager") || ((User.IsInRole("Developer"))
+              || (User.IsInRole("Submitter")) && ticketComment.CreatorId == userId))
             {
                 var model = new CreateComment
                 {
@@ -189,9 +188,8 @@ namespace bugTracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var userId = User.Identity.GetUserId();
-            if ((User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("Project Manager")))
-               || ((User.Identity.IsAuthenticated && (User.IsInRole("Submitter") || User.IsInRole("Developer")))
-                && ticketComment.CreatorId == userId))
+            if (User.IsInRole("Admin") || User.IsInRole("Project Manager") || ((User.IsInRole("Developer"))
+              || (User.IsInRole("Submitter")) && ticketComment.CreatorId == userId))
             {
                 DbContext.TicketComments.Remove(ticketComment);
                 DbContext.SaveChanges();

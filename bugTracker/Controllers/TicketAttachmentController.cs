@@ -41,7 +41,8 @@ namespace bugTracker.Controllers
             //Assign a status that each role can edit
             foreach (var ticketAttachment in model)
             {
-                if (ticketAttachment.CreatorId == userId && (User.IsInRole("Developer")|| User.IsInRole("Submitter")))
+                if (User.IsInRole("Admin") || User.IsInRole("Project Manager") || ((User.IsInRole("Developer"))
+              || (User.IsInRole("Submitter")) && ticketAttachment.CreatorId == userId))
      
                 {
                     ticketAttachment.IfEdit = true;
@@ -169,9 +170,8 @@ namespace bugTracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var userId = User.Identity.GetUserId();
-            if ((User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("Project Manager")))
-             || ((User.Identity.IsAuthenticated && (User.IsInRole("Submitter") || User.IsInRole("Developer")))
-             && attachment.CreatorId == userId))
+            if (User.IsInRole("Admin") || User.IsInRole("Project Manager") || ((User.IsInRole("Developer"))
+              || (User.IsInRole("Submitter")) && attachment.CreatorId == userId))
             {
                 DbContext.TicketAttachments.Remove(attachment);
                 DbContext.SaveChanges();

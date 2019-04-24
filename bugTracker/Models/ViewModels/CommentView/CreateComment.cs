@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace bugTracker.Models.CommentView
+namespace bugTracker.Models.ViewModels.CommentView
 {
     public class CreateComment
     {

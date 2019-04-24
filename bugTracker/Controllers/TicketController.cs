@@ -3,7 +3,7 @@ using bugTracker.Models;
 using bugTracker.Models.Domain;
 using bugTracker.Models.Filters;
 using bugTracker.Models.Helpers;
-using bugTracker.Models.ViewModels;
+using bugTracker.Models.ViewModels.TicketView;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
