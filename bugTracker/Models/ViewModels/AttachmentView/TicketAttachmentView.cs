@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace bugTracker.Models.CommentView
+namespace bugTracker.Models.ViewModels.AttachmentView
 {
-    public class TicketCommentView
+    public class TicketAttachmentView
     {
         public int Id { get; set; }
-        public string Comment { get; set; }
-
-        public DateTime Created { get; set; }
-        public DateTime Updated { get; set; }
+        public string Description { get; set; }
+        public string FileUrl { get; set; }
         public int TicketId { get; set; }
-        public virtual Ticket Ticket { get; set; }
+        //public HttpPostedFileBase Media { get; set; }
         public string CreatorId { get; set; }
+
         public virtual ApplicationUser Creator { get; set; }
+        public bool IfEdit { get; set; }
     }
 }

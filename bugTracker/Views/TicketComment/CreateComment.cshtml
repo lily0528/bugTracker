@@ -16,7 +16,8 @@
                     <div><span><strong>TicketId:</strong></span>@Model.TicketId</div>
                     <div><span><strong>Ticket Title:</strong></span>@Model.TicketTitle</div>
                     <form method="post" enctype="multipart/form-data">
-                        @Html.ValidationSummary(false)
+                        @Html.AntiForgeryToken()
+                        @*@Html.ValidationSummary(false)*@
                         <div class="form-group">
                             @Html.LabelFor(p => p.Comment, "Ticket Comment:")
                             @Html.TextAreaFor(p => p.Comment, new { @class = "form-control", placeholder = "Comment", rows = 5, columns = 20 })

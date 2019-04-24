@@ -189,8 +189,8 @@
     <Compile Include="Controllers\TicketController.cs" />
     <Compile Include="Models\Constants.cs" />
     <Compile Include="Models\Filters\MVCFiltersAuthorization.cs" />
-    <Compile Include="Models\CommentView\CreateComment.cs" />
-    <Compile Include="Models\AttachmentView\CreateTicketAttachment.cs" />
+    <Compile Include="Models\ViewModels\CommentView\CreateComment.cs" />
+    <Compile Include="Models\ViewModels\AttachmentView\CreateTicketAttachment.cs" />
     <Compile Include="Models\ViewModels\DashboardView.cs" />
     <Compile Include="Models\ViewModels\TicketAssginDeveloper.cs" />
     <Compile Include="Models\Helpers\AutoMapperConfig.cs" />
@@ -221,8 +221,8 @@
     <Compile Include="Models\ViewModels\EditMemberProject.cs" />
     <Compile Include="Models\ViewModels\EditProject.cs" />
     <Compile Include="Models\ViewModels\IndexProject.cs" />
-    <Compile Include="Models\AttachmentView\TicketAttachmentView.cs" />
-    <Compile Include="Models\CommentView\TicketCommentView.cs" />
+    <Compile Include="Models\ViewModels\AttachmentView\TicketAttachmentView.cs" />
+    <Compile Include="Models\ViewModels\CommentView\TicketCommentView.cs" />
     <Compile Include="Models\ViewModels\UserRole.cs" />
     <Compile Include="Models\ViewModels\EditUserRole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

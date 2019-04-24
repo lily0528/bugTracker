@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using bugTracker.Models;
 using bugTracker.Models.Domain;
-using bugTracker.Models.AttachmentView;
+using bugTracker.Models.ViewModels.AttachmentView;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
@@ -27,7 +27,7 @@ namespace bugTracker.Controllers
             DbContext = new ApplicationDbContext();
         }
 
-        [HttpGet]
+       
         public ActionResult Index(int? id)
         {
 
@@ -35,9 +35,22 @@ namespace bugTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            var userId = User.Identity.GetUserId();
             var ticketAttachments = DbContext.TicketAttachments.Where(p => p.TicketId == id).ToList();
             var model = Mapper.Map<List<TicketAttachmentView>>(ticketAttachments);
-
+            //Assign a status that each role can edit
+            foreach (var ticketAttachment in model)
+            {
+                if (ticketAttachment.CreatorId == userId && (User.IsInRole("Developer")|| User.IsInRole("Submitter")))
+     
+                {
+                    ticketAttachment.IfEdit = true;
+                }
+                else
+                {
+                    ticketAttachment.IfEdit = false;
+                }
+            }
             return View(model);
         }
 
@@ -76,23 +89,30 @@ namespace bugTracker.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin, Project Manager, Submitter, Developer")]
+        [ValidateAntiForgeryToken]
         public ActionResult CreateAttachment(int? id, CreateTicketAttachment formData)
         {
             if (!id.HasValue)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
-            //if (!ModelState.IsValid)
-            //{
-            //    return View();
-            //}
+            var userId = User.Identity.GetUserId();
             var ticket = DbContext.Tickets.FirstOrDefault(p => p.Id == id);
             if (ticket == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var userId = User.Identity.GetUserId();
+            if (!ModelState.IsValid)
+            {
+                var model = new CreateTicketAttachment
+                {
+                    TicketId = ticket.Id,
+                    TicketTitle = ticket.Title,
+                    IfEdit = true
+                };
+                return View(model);
+            }
+           
             if ((User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("Project Manager")))
                  || (User.Identity.IsAuthenticated && User.IsInRole("Submitter") && ticket.CreatedById == userId)
                  || (User.Identity.IsAuthenticated && User.IsInRole("Developer") && ticket.AssignedToId == userId))

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using bugTracker.Models.AttachmentView;
-using bugTracker.Models.CommentView;
+using bugTracker.Models.ViewModels.AttachmentView;
+using bugTracker.Models.ViewModels.CommentView;
 using bugTracker.Models.Domain;
 using bugTracker.Models.ViewModels;
 using System;

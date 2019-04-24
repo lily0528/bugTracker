@@ -4,16 +4,16 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace bugTracker.Models.AttachmentView
+namespace bugTracker.Models.ViewModels.AttachmentView
 {
     public class CreateTicketAttachment
     {
         public int Id { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Description is required")]
         public string Description { get; set; }
-        [Required]
         public string FileUrl { get; set; }
         public int TicketId { get; set; }
+        [Required(ErrorMessage = "Media required")]
         public HttpPostedFileBase Media { get; set; }
         public string CreatorId { get; set; }
         public string Creator { get; set; }

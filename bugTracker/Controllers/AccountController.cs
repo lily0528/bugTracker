@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using bugTracker.Models;
+using System.Net;
 
 namespace bugTracker.Controllers
 {
@@ -17,9 +18,11 @@ namespace bugTracker.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext DbContext;
 
         public AccountController()
         {
+            DbContext = new ApplicationDbContext();
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
@@ -58,6 +61,35 @@ namespace bugTracker.Controllers
              return View();
         }
 
+        [AllowAnonymous]
+        public async Task<ActionResult> DemoLoginUser(string role)
+        {
+            string userName;
+            ApplicationUser users;
+            if (role == "Admin")
+            {
+                userName = "admin@mybugtracker.com";
+            }
+            else if (role == "Project Manager")
+            {
+                userName = "ProjectManager@gmail.com";
+            }
+            else if (role == "Developer")
+            {
+                userName = "Developer@gmail.com";
+            }
+            else if (role == "Submitter")
+            {
+                userName = "Submitter@gmail.com";
+            }
+            else
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            users = DbContext.Users.Where(p => p.Email == userName).FirstOrDefault();
+            await SignInManager.SignInAsync(users, isPersistent: false, rememberBrowser: false);
+            return RedirectToAction("Index", "Home");
+        }
         //
         // GET: /Account/Login
         [AllowAnonymous]

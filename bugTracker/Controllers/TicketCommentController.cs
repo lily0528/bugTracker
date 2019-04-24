@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using bugTracker.Models;
-using bugTracker.Models.Domain;
 using bugTracker.Models.CommentView;
+using bugTracker.Models.Domain;
+using bugTracker.Models.ViewModels.CommentView;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
@@ -34,7 +35,20 @@ namespace bugTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            var userId = User.Identity.GetUserId();
             var model = Mapper.Map<List<TicketCommentView>>(ticketComments);
+            foreach (var ticketComment in model)
+            {
+                if (ticketComment.CreatorId == userId && (User.IsInRole("Developer") || User.IsInRole("Submitter")))
+
+                {
+                    ticketComment.IfEdit = true;
+                }
+                else
+                {
+                    ticketComment.IfEdit = false;
+                }
+            }
             return View(model);
         }
 
@@ -74,19 +88,30 @@ namespace bugTracker.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin,Project Manager,Submitter,Developer")]
+        [ValidateAntiForgeryToken]
         public ActionResult CreateComment(int? id, CreateComment formData)
         {
             if (!id.HasValue)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
             var userId = User.Identity.GetUserId();
             var ticket = DbContext.Tickets.FirstOrDefault(p => p.Id == id);
             if (ticket == null)
             {
                 return HttpNotFound();
             };
+            if (!ModelState.IsValid)
+            {
+                var model = new CreateComment
+                {
+                    TicketId = ticket.Id,
+                    TicketTitle = ticket.Title,
+                    IfEdit = true
+                };
+                return View(model);
+            }
+
             if ((User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("Project Manager")))
               || (User.Identity.IsAuthenticated && User.IsInRole("Submitter") && ticket.CreatedById == userId)
               || (User.Identity.IsAuthenticated && User.IsInRole("Developer") && ticket.AssignedToId == userId))

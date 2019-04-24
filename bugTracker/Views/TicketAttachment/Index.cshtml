@@ -23,19 +23,22 @@
             <tbody>
                 @foreach (var record in Model)
                 {
-                    <tr>
-                        <td>@record.Id</td>
-                        <td>@record.Description</td>
-                        <td>@record.FileUrl</td>
-                        <td>@record.Creator.DisplayName</td>
+                <tr>
+                    <td>@record.Id</td>
+                    <td>@record.Description</td>
+                    <td>@record.FileUrl</td>
+                    <td>@record.Creator.DisplayName</td>
+                    <td>
+                        <a href="@Url.Content(record.FileUrl)">
+                            @Html.DisplayFor(m => record.Description)
+                        </a>
+                    </td>
+                    @if (record.IfEdit == true)
+                    {
                         <td>
-                            <a href="@Url.Content(record.FileUrl)">
-                                @Html.DisplayFor(m => record.Description)
-                            </a>
+                            <a href="@Url.Action("AttachmentDelete", "TicketAttachment", new { id = record.Id })">Delete</a>
                         </td>
-                        <td>
-                            <a href="@Url.Action("AttachmentDelete","TicketAttachment", new {id = record.Id })">Delete</a>
-                        </td>
+                    }
                     </tr>
                 }
             </tbody>

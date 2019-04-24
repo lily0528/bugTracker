@@ -1,7 +1,24 @@
 ﻿
 @{
     ViewBag.Title = "DemoLogin";
+    Layout = null;
 }
 
 <h2>DemoLogin</h2>
 
+<div class="row">
+    <div class="col-lg-5">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-chart-area"></i>
+                DemoLogin
+            </div>
+            <div class="card-body">
+                <a class="btn btn-primary btn-lg btn-block" href="@Url.Action("DemoLoginUser","Account",new {role = "Admin"})">Admin</a>
+                <a class="btn btn-primary btn-lg btn-block" href="@Url.Action("DemoLoginUser","Account",new {role = "Project Manager"})">Project Manager</a>
+                <a class="btn btn-primary btn-lg btn-block" href="@Url.Action("DemoLoginUser","Account",new {role = "Submitter"})">Submitter</a>
+                <a class="btn btn-primary btn-lg btn-block" href="@Url.Action("DemoLoginUser","Account",new {role = "Developer"})">Developer</a>
+            </div>
+            </div>
+        </div>
+    </div>
