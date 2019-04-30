@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace bugTracker.Models.Domain
+namespace bugTracker.Models.ViewModels.TicketView
 {
-    public class TicketHistory
+    public class IndexTicketHistory
     {
         public int Id { get; set; }
         public string OldValue { get; set; }
@@ -13,10 +13,11 @@ namespace bugTracker.Models.Domain
         public string Property { get; set; }
         public DateTime Updated { get; set; }
 
-        public string UserId { get; set; }
-        public virtual ApplicationUser User { get; set; }
-
+        //public string UserId { get; set; }
+        //public virtual ApplicationUser User { get; set; }
+        public string UserName { get; set; }
         public int TicketId { get; set; }
-        public virtual Ticket Ticket { get; set; }
+        public virtual Ticket Ticket { get; set; } 
+
     }
 }

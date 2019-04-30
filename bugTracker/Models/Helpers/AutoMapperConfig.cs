@@ -26,6 +26,7 @@ namespace bugTracker.Models.Helpers
                     .ForMember(dst => dst.CreatedByName, opt => opt.MapFrom(src => src.CreatedBy.UserName));
                 cfg.CreateMap<TicketAttachment, TicketAttachmentView>();
                 cfg.CreateMap<TicketComment, TicketCommentView>();
+                cfg.CreateMap<TicketHistory, IndexTicketHistory>();
             });
         }
 

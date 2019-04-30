@@ -77,13 +77,16 @@
                                                 <i class="fas fa-user"></i>
                                             </a>
                                         }
-                                            <a href="@Url.Action("CreateAttachment", "TicketAttachment", new { id = record.Id})">
-                                                <i class="fas fa-paperclip"></i>
-                                            </a>
-                                            <a href="@Url.Action("CreateComment", "TicketComment", new { id = record.Id})">
-                                                <i class="fas fa-comment"></i>
-                                            </a>
-                                        </td>
+                                        <a href="@Url.Action("CreateAttachment", "TicketAttachment", new { id = record.Id})">
+                                            <i class="fas fa-paperclip"></i>
+                                        </a>
+                                        <a href="@Url.Action("CreateComment", "TicketComment", new { id = record.Id})">
+                                            <i class="fas fa-comment"></i>
+                                        </a>
+                                        <a href="@Url.Action("Index", "Notification", new { id = record.Id})">
+                                            <i class="fas fa-envelope"></i>
+                                        </a>
+                                    </td>
                             </tr>
                             }
                         </tbody>

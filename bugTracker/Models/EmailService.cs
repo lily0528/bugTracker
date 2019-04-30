@@ -62,7 +62,5 @@ namespace bugTracker.Models
             return Task.Run(() =>
             Send(message.Destination, message.Body, message.Subject));
         }
-
-
     }
 }

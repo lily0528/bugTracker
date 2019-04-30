@@ -183,15 +183,22 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Controllers\TicketAttachmentController.cs" />
     <Compile Include="Controllers\TicketCommentController.cs" />
     <Compile Include="Controllers\TicketController.cs" />
+    <Compile Include="Controllers\TicketHistoryController.cs" />
     <Compile Include="Models\Constants.cs" />
+    <Compile Include="Models\Domain\TicketHistory.cs" />
+    <Compile Include="Models\Domain\TicketNotification.cs" />
     <Compile Include="Models\Filters\MVCFiltersAuthorization.cs" />
     <Compile Include="Models\ViewModels\CommentView\CreateComment.cs" />
     <Compile Include="Models\ViewModels\AttachmentView\CreateTicketAttachment.cs" />
     <Compile Include="Models\ViewModels\DashboardView.cs" />
+    <Compile Include="Models\ViewModels\NotificationView\CreateNotification.cs" />
+    <Compile Include="Models\ViewModels\TicketView\IndexTicketHistory.cs" />
+    <Compile Include="Models\ViewModels\NotificationView\IndexTicketNotification.cs" />
     <Compile Include="Models\ViewModels\TicketView\TicketAssginDeveloper.cs" />
     <Compile Include="Models\Helpers\AutoMapperConfig.cs" />
     <Compile Include="Models\Helpers\TicketHelper.cs" />
@@ -1533,6 +1540,9 @@
     <Content Include="Views\Ticket\Details.cshtml" />
     <Content Include="Views\Ticket\MyTickets.cshtml" />
     <Content Include="Views\TicketComment\EditComment.cshtml" />
+    <Content Include="Views\Ticket\TicketDetail.cshtml" />
+    <Content Include="Views\TicketHistory\Index.cshtml" />
+    <Content Include="Views\Notification\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -5,8 +5,10 @@ using bugTracker.Models.ViewModels.CommentView;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
 
@@ -16,11 +18,13 @@ namespace bugTracker.Controllers
     {
         // GET: TicketComment
         private ApplicationDbContext DbContext;
+        private TicketHelper TicketHelper { get; }
         private bool editStatus;
 
         public TicketCommentController()
         {
             DbContext = new ApplicationDbContext();
+            TicketHelper = new TicketHelper(DbContext);
         }
 
         public ActionResult Index(int? id)
@@ -125,6 +129,25 @@ namespace bugTracker.Controllers
                 };
                 DbContext.TicketComments.Add(ticketComment);
                 DbContext.SaveChanges();
+
+                //Send Email to developer
+                if (ticket.AssignedTo != null)
+                {
+                    string subject = "New ticket comment was added.";
+                    string body = "New ticket comment was added.";
+                    TicketHelper.EmailServiceSend(id, subject, body);
+                }
+                //if (ticket.AssignedTo != null)
+                //{
+                //    var emailService = new EmailService();
+                //    var message = new MailMessage(ConfigurationManager.AppSettings["SmtpFrom"], ticket.AssignedTo.Email)
+                //    {
+                //        Subject = "New ticket comment was assigned to you.",
+                //        Body = "New ticket comment was assigned  to you.",
+                //        IsBodyHtml = true
+                //    };
+                //    emailService.Send(ticket.AssignedTo.Email, message.Body, message.Subject);
+                //}
                 return RedirectToAction("CreateComment", "TicketComment", new { id = ticketComment.TicketId });
             }
             else

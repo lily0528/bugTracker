@@ -19,8 +19,7 @@ namespace bugTracker
 {
     public class EmailService : IIdentityMessageService
     {
-        private string SmtpHost = ConfigurationManager.
-        AppSettings["SmtpHost"];
+        private string SmtpHost = ConfigurationManager.AppSettings["SmtpHost"];
         private int SmtpPort = Convert.ToInt32(ConfigurationManager.AppSettings["SmtpPort"]);
         private string SmtpUsername = ConfigurationManager.AppSettings["SmtpUsername"];
         private string SmtpPassword = ConfigurationManager.AppSettings["SmtpPassword"];

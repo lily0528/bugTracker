@@ -5,9 +5,11 @@ using bugTracker.Models.ViewModels.AttachmentView;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
 using Constants = bugTracker.Models.Constants;
@@ -19,12 +21,13 @@ namespace bugTracker.Controllers
         // GET: TicketAttachment
 
         private ApplicationDbContext DbContext;
+        private TicketHelper TicketHelper { get; }
         private bool editStatus;
        
-
         public TicketAttachmentController()
         {
             DbContext = new ApplicationDbContext();
+            TicketHelper = new TicketHelper(DbContext);
         }
 
        
@@ -150,6 +153,14 @@ namespace bugTracker.Controllers
 
                 DbContext.TicketAttachments.Add(ticketAttachment);
                 DbContext.SaveChanges();
+
+                // Send Email to developer
+                if (ticket.AssignedTo != null)
+                {
+                    string subject = "New attachement was added.";
+                    string body = "New attachement was added.";
+                    TicketHelper.EmailServiceSend(id, subject, body);
+                }
                 return RedirectToAction("CreateAttachment", "TicketAttachment", new { id = ticketAttachment.TicketId });
             }
             else
