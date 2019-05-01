@@ -27,6 +27,8 @@ namespace bugTracker.Models
         public string UserId { get; set; }
         public virtual List<ApplicationUser> Users { get; set; }
         public virtual List<Ticket> Tickets { get; set; }
+
+        public bool? IfArchive { get; set; }
     }
 
 }

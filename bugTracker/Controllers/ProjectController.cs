@@ -34,7 +34,7 @@ namespace bugTracker.Controllers
         public ActionResult ProjectList()
         {
             //var userId = User.Identity.GetUserId();
-            var model = DbContext.Projects
+            var model = DbContext.Projects.Where(p => p.IfArchive != true)
                .Select(p => new IndexProject
                {
                    Id = p.Id,
@@ -53,7 +53,7 @@ namespace bugTracker.Controllers
         {
             var userId = User.Identity.GetUserId();
             var model = DbContext.Projects
-               .Where(p => p.Users.Any(u => u.Id == userId))
+               .Where(p => p.Users.Any(u => u.Id == userId) && p.IfArchive != true)
                .Select(p => new IndexProject
                {
                    Id = p.Id,
@@ -211,6 +211,27 @@ namespace bugTracker.Controllers
             project.Users.Remove(user);
             DbContext.SaveChanges();
             return RedirectToAction("EditMemberProject", new { id = project.Id });
+        }
+
+
+        [Authorize(Roles = "Admin,Project Manager")]
+        public ActionResult Archive(int? id)
+        {
+            if (!id.HasValue)
+            {
+                return RedirectToAction(nameof(ProjectController.ProjectList));
+            }
+            var userId = User.Identity.GetUserId();
+            var project = DbContext.Projects.FirstOrDefault(p => p.Id == id);
+            if (User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("Project Manager")))
+            {
+                if (project.IfArchive == false || project.IfArchive == null)
+                {
+                    project.IfArchive = true;
+                    DbContext.SaveChanges();
+                }
+            }
+            return RedirectToAction("ProjectList", new { id = project.Id });
         }
     }
 }

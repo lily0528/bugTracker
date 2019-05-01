@@ -35,7 +35,7 @@ namespace bugTracker.Controllers
             var userId = User.Identity.GetUserId();
 
             //need set relationship in AutoMapperConfig
-            var tickets = DbContext.Tickets.ToList();
+            var tickets = DbContext.Tickets.Where(p => p.Project.IfArchive != true).ToList();
             var model = Mapper.Map<List<IndexTicket>>(tickets);
 
             return View(model);
@@ -45,7 +45,7 @@ namespace bugTracker.Controllers
         public ActionResult FromProjects()
         {
             var userId = User.Identity.GetUserId();
-            var tickets = DbContext.Tickets.Where(p => p.Project.Users.Any(u => u.Id == userId) || p.CreatedById == userId || p.AssignedToId == userId).ToList();
+            var tickets = DbContext.Tickets.Where(p => (p.Project.Users.Any(u => u.Id == userId) || p.CreatedById == userId || p.AssignedToId == userId) && p.Project.IfArchive != true).ToList();
             var model = Mapper.Map<List<IndexTicket>>(tickets);
 
             //Assign a status that each role can edit
@@ -68,7 +68,7 @@ namespace bugTracker.Controllers
         public ActionResult MyTickets()
         {
             var userId = User.Identity.GetUserId();
-            var tickets = DbContext.Tickets.Where(p => p.CreatedById == userId || p.AssignedToId == userId).ToList();
+            var tickets = DbContext.Tickets.Where(p => (p.CreatedById == userId || p.AssignedToId == userId) && p.Project.IfArchive != true).ToList();
             var model = Mapper.Map<List<IndexTicket>>(tickets);
             return View(model);
         }
@@ -99,7 +99,7 @@ namespace bugTracker.Controllers
         public ActionResult CreateTicket()
         {
             var userId = User.Identity.GetUserId();
-            var assignedProjetcs = DbContext.Projects.Where(p => p.Users.Any(u => u.Id == userId)).ToList();
+            var assignedProjetcs = DbContext.Projects.Where(p => p.Users.Any(u => u.Id == userId) && p.IfArchive != true).ToList();
             var model = new CreateTicket();
             model.Project = new SelectList(assignedProjetcs, "Id", "Name");
             model.TicketType = new SelectList(DbContext.TicketTypes.ToList(), "Id", "Name");
@@ -137,9 +137,9 @@ namespace bugTracker.Controllers
                 ticket.TicketTypeId = formData.TicketTypeId;
                 ticket.TicketPriorityId = formData.TicketPriorityId;
                 DbContext.SaveChanges();
-                string subject = "New ticket was added to you.";
-                string body = "New ticket was added  to you.";
-                TicketHelper.EmailServiceSend(id, subject, body);
+                //string subject = "New ticket was added to you.";
+                //string body = "New ticket was added  to you.";
+                //TicketHelper.EmailServiceSend(id, subject, body);
             }
             else
             {
@@ -171,11 +171,12 @@ namespace bugTracker.Controllers
                             //currentValue = formData.Title;
                             fieldName = "Title";
                         }
-                        if (propertyName == "Description") {
+                        if (propertyName == "Description")
+                        {
                             //originalValue = ticket.Description;
                             //currentValue = formData.Description;
                             fieldName = "Description";
-                       }
+                        }
                         if (propertyName == "ProjectId")
                         {
                             var projectId = Convert.ToInt32(originalValue);
@@ -216,7 +217,7 @@ namespace bugTracker.Controllers
                         changes.Add(ticketHistory);
                     }
                 }
-                
+
                 ticket.Updated = DateTime.Now;
                 DbContext.TicketHistories.AddRange(changes);
                 DbContext.SaveChanges();
@@ -225,18 +226,6 @@ namespace bugTracker.Controllers
                 TicketHelper.EmailServiceSend(id, subject, body);
             }
             //Email Send
-
-            //var emailService = new EmailService();
-            ////var userList = DbContext.TicketNotifications.Where(p => p.Users.Any(u => u.Id == userId)).
-            //var addresses = DbContext.TicketNotifications.Where(p => p.TicketId == id).Select(m => m.User.Email).ToList();
-            //var message = new MailMessage(ConfigurationManager.AppSettings["SmtpFrom"], string.Join(",", addresses.ToArray()));
-
-            //message.Subject = "New ticket was modified to you.";
-            //message.Body = "New ticket was modified to you.";
-            //message.IsBodyHtml = true;
-            //emailService.Send(string.Join(",", addresses.ToArray()), message.Body, message.Subject);
-
-
 
             if (User.IsInRole("Submitter") || User.IsInRole("Developer"))
             {
@@ -372,7 +361,7 @@ namespace bugTracker.Controllers
                     changes.Add(ticketHistory);
                 }
             }
-         
+
             DbContext.TicketHistories.AddRange(changes);
             DbContext.SaveChanges();
 

@@ -137,17 +137,7 @@ namespace bugTracker.Controllers
                     string body = "New ticket comment was added.";
                     TicketHelper.EmailServiceSend(id, subject, body);
                 }
-                //if (ticket.AssignedTo != null)
-                //{
-                //    var emailService = new EmailService();
-                //    var message = new MailMessage(ConfigurationManager.AppSettings["SmtpFrom"], ticket.AssignedTo.Email)
-                //    {
-                //        Subject = "New ticket comment was assigned to you.",
-                //        Body = "New ticket comment was assigned  to you.",
-                //        IsBodyHtml = true
-                //    };
-                //    emailService.Send(ticket.AssignedTo.Email, message.Body, message.Subject);
-                //}
+
                 return RedirectToAction("CreateComment", "TicketComment", new { id = ticketComment.TicketId });
             }
             else
