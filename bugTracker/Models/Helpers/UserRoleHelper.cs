@@ -27,17 +27,12 @@ namespace bugTracker.Models.Helpers
             return UserManager.GetRoles(UserId).ToList();
         }
 
-        //public ICollection<ApplicationUser> UsersInRole(string roleName)
-        //{
-        //    var resultList = new List<ApplicationUser>();
-        //    var List = UserManager.Users.ToList();
-        //    foreach (var user in List)
-        //    {
-        //        if (IsUserInRole(user.Id, roleName)) resultList.Add(user);
-        //    }
-
-        //    return resultList;
-        //}
+        public List<ApplicationUser> UsersInRole(string roleName)
+        {
+            // get all users in the role
+            var roleId = RoleManager.FindByName(roleName).Id;
+            return DbContext.Users.Where(u => u.Roles.Select(r => r.RoleId).Contains(roleId)).ToList();
+        }
 
         public List<IdentityRole> GetAllRoles()
         {

@@ -55,7 +55,7 @@
                                             <i class="far fa-edit"></i>
                                         </a>
                                         <span> &emsp;</span>
-                                        if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+                                        @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
                                         {
                                         <a href="@Url.Action("Archive", "Project", new { id = record.Id })">
                                             <i class="fas fa-archive"></i>

@@ -24,17 +24,16 @@ namespace bugTracker.Controllers
             var user = DbContext.Users.Where(p => p.Id == userId).FirstOrDefault();
             var model = new DashboardView
             {
-                NumberOfProjects = DbContext.Projects.Count(),
-                NumberOfTickets = DbContext.Tickets.Count(),
-                OpenOfTickets = DbContext.Tickets.Where(p => p.TicketStatus.Name == "Open").Count(),
-                ResolvedOfTickets = DbContext.Tickets.Where(p => p.TicketStatus.Name == "Resolved").Count(),
-                ClosedOfTickets = DbContext.Tickets.Where(p => p.TicketStatus.Name == "Closed").Count(),
-                AssignedOfProjects = DbContext.Projects.Where(p => p.Users.Any(m => m.Id == userId )).Count(),
-                AssignedOfTickets = user.AssignedTickets.Count(),
-                CreatedOfTickets = user.CreatedTickets.Count()
+                NumberOfProjects = DbContext.Projects.Where(p =>p.IfArchive != true).Count(),
+                NumberOfTickets = DbContext.Tickets.Where(p => p.Project.IfArchive != true).Count(),
+                OpenOfTickets = DbContext.Tickets.Where(p => p.TicketStatus.Name == "Open" && p.Project.IfArchive != true).Count(),
+                ResolvedOfTickets = DbContext.Tickets.Where(p => p.TicketStatus.Name == "Resolved" && p.Project.IfArchive != true).Count(),
+                RejectedOfTickets = DbContext.Tickets.Where(p => p.TicketStatus.Name == "Rejected" && p.Project.IfArchive != true).Count(),
+                AssignedOfProjects = DbContext.Projects.Where(p => p.Users.Any(m => m.Id == userId && p.IfArchive != true)).Count(),
+                AssignedOfTickets = user.AssignedTickets.Where(p =>p.Project.IfArchive != true).Count(),
+                CreatedOfTickets = user.CreatedTickets.Where(p => p.Project.IfArchive != true).Count()
             };
             return View(model);
-            
         }
 
         public ActionResult About()

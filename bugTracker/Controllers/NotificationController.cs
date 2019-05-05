@@ -53,7 +53,12 @@ namespace bugTracker.Controllers
             return View(model);
         }
 
-      
+        //public ActionResult Index(string responsables, bool checkResp = false)
+        //{
+
+        //}
+
+        [Authorize(Roles = "Admin,Project Manager")]
         public ActionResult SaveNotification(int? ticketId, IndexTicketNotification formdata)
         {
             var managerUserId = User.Identity.GetUserId();

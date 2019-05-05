@@ -67,6 +67,7 @@ namespace bugTracker.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Project Manager")]
         public ActionResult CreateProject()
         {
             return View();

@@ -33,8 +33,16 @@
                     <td>@record.Creator.DisplayName</td>
                     @if (record.IfEdit == true)
                     {
-                        <td><a href="@Url.Action("EditComment", "TicketComment", new { id = record.Id })">Edit</a>
-                        <a href="@Url.Action("DeleteComment", "TicketComment", new { id = record.Id })">Delete</a></td>
+                        <td>
+                            <a href="@Url.Action("EditComment", "TicketComment", new { id = record.Id })"><i class="fas fa-edit"></i></a>
+                            <a href="@Url.Action("DeleteComment", "TicketComment", new { id = record.Id })"><i class="fas fa-trash"></i></a>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <span>&empty;</span>
+                        </td>
                     }
                 </tr>
                 }

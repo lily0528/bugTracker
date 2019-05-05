@@ -11,7 +11,7 @@ namespace bugTracker.Models.ViewModels
         public int NumberOfTickets { get; set; }
         public int OpenOfTickets { get; set; }
         public int ResolvedOfTickets { get; set; }
-        public int ClosedOfTickets { get; set; }
+        public int RejectedOfTickets { get; set; }
         public int AssignedOfProjects { get; set; }
         public int AssignedOfTickets { get; set; }
         public int CreatedOfTickets { get; set; }

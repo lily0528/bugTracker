@@ -23,14 +23,12 @@ namespace bugTracker.Controllers
         private ApplicationDbContext DbContext;
         private TicketHelper TicketHelper { get; }
         private bool editStatus;
-       
+
         public TicketAttachmentController()
         {
             DbContext = new ApplicationDbContext();
             TicketHelper = new TicketHelper(DbContext);
         }
-
-       
         public ActionResult Index(int? id)
         {
 
@@ -41,12 +39,13 @@ namespace bugTracker.Controllers
             var userId = User.Identity.GetUserId();
             var ticketAttachments = DbContext.TicketAttachments.Where(p => p.TicketId == id).ToList();
             var model = Mapper.Map<List<TicketAttachmentView>>(ticketAttachments);
+
             //Assign a status that each role can edit
             foreach (var ticketAttachment in model)
             {
-                if (User.IsInRole("Admin") || User.IsInRole("Project Manager") || ((User.IsInRole("Developer"))
-              || (User.IsInRole("Submitter")) && ticketAttachment.CreatorId == userId))
-     
+                if (User.IsInRole("Admin") || User.IsInRole("Project Manager") ||
+                    ((User.IsInRole("Developer") || User.IsInRole("Submitter")) && ticketAttachment.CreatorId == userId))
+
                 {
                     ticketAttachment.IfEdit = true;
                 }
@@ -116,10 +115,10 @@ namespace bugTracker.Controllers
                 };
                 return View(model);
             }
-           
-            if ((User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("Project Manager")))
-                 || (User.Identity.IsAuthenticated && User.IsInRole("Submitter") && ticket.CreatedById == userId)
-                 || (User.Identity.IsAuthenticated && User.IsInRole("Developer") && ticket.AssignedToId == userId))
+
+            if (User.IsInRole("Admin") || User.IsInRole("Project Manager")
+                 || ( User.IsInRole("Submitter") && ticket.CreatedById == userId)
+                 || ( User.IsInRole("Developer") && ticket.AssignedToId == userId))
             {
                 string fileExtension;
                 if (formData.Media != null)
@@ -157,8 +156,8 @@ namespace bugTracker.Controllers
                 // Send Email to developer
                 if (ticket.AssignedTo != null)
                 {
-                    string subject = "New attachement was added.";
-                    string body = "New attachement was added.";
+                    string subject = $"<p>New attachement {formData.Description} was assigned to you!</p>";
+                    string body = $"<p>New attachement {formData.Description} was assigned to you!</p>";
                     TicketHelper.EmailServiceSend(id, subject, body);
                 }
                 return RedirectToAction("CreateAttachment", "TicketAttachment", new { id = ticketAttachment.TicketId });
@@ -169,6 +168,7 @@ namespace bugTracker.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Project Manager, Submitter, Developer")]
         public ActionResult AttachmentDelete(int? id)
         {
             if (!id.HasValue)
@@ -181,27 +181,14 @@ namespace bugTracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var userId = User.Identity.GetUserId();
-            if (User.IsInRole("Admin") || User.IsInRole("Project Manager") || ((User.IsInRole("Developer"))
-              || (User.IsInRole("Submitter")) && attachment.CreatorId == userId))
+            if (User.IsInRole("Admin") || User.IsInRole("Project Manager") ||
+                ((User.IsInRole("Developer") || User.IsInRole("Submitter")) && attachment.CreatorId == userId))
             {
                 DbContext.TicketAttachments.Remove(attachment);
                 DbContext.SaveChanges();
             }
             return RedirectToAction("CreateAttachment", "TicketAttachment", new { id = attachment.TicketId });
         }
-
-        //[HttpGet]
-        //public ActionResult AttachmentEdit(int?id)
-        //{
-        //    if (!id.HasValue)
-        //    {
-        //        return View();
-        //    }
-        //    var TicketAttachment = DbContext.TicketAttachments.Where(p => p.Id == id).FirstOrDefault();
-        //    var model = Mapper.Map<EditTicketAttachment>(TicketAttachment);
-        //    return View(model);
-        //}
-
 
     }
 }

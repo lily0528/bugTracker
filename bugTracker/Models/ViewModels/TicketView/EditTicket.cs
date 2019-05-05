@@ -27,5 +27,7 @@ namespace bugTracker.Models.ViewModels.TicketView
         public SelectList TicketStatus { get; set; }
 
         public DateTime Updated { get; set; }
+
+        public bool NotifyMe { get; set; }
     }
 }

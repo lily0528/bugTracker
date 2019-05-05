@@ -90,7 +90,7 @@ namespace bugTracker.Controllers
             await SignInManager.SignInAsync(users, isPersistent: false, rememberBrowser: false);
             return RedirectToAction("Index", "Home");
         }
-        //
+
         // GET: /Account/Login
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
@@ -99,7 +99,6 @@ namespace bugTracker.Controllers
             return View();
         }
 
-        //
         // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
@@ -129,7 +128,6 @@ namespace bugTracker.Controllers
             }
         }
 
-        //
         // GET: /Account/VerifyCode
         [AllowAnonymous]
         public async Task<ActionResult> VerifyCode(string provider, string returnUrl, bool rememberMe)
@@ -142,7 +140,6 @@ namespace bugTracker.Controllers
             return View(new VerifyCodeViewModel { Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe });
         }
 
-        //
         // POST: /Account/VerifyCode
         [HttpPost]
         [AllowAnonymous]

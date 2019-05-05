@@ -35,6 +35,9 @@ namespace bugTracker.Models
             // Add custom user claims here
             return userIdentity;
         }
+
+        [InverseProperty(nameof(Ticket.BlockingUsers))]
+        public virtual List<Ticket> BlockedTickets { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>

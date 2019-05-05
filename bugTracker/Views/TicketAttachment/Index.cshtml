@@ -39,6 +39,12 @@
                             <a href="@Url.Action("AttachmentDelete", "TicketAttachment", new { id = record.Id })">Delete</a>
                         </td>
                     }
+                    else
+                    {
+                        <td>
+                            <span>&empty;</span>
+                        </td>
+                    }
                     </tr>
                 }
             </tbody>

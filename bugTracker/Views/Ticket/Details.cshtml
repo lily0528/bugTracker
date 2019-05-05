@@ -16,7 +16,7 @@
             <h6>
                 &emsp;@Html.LabelFor(p => p.ProjectName, "Project Name:") @Html.DisplayFor(p => p.ProjectName)
             </h6>
-
+           
             <table class="table align-items-baseline">
                 <tbody>
                     <tr>
@@ -44,7 +44,7 @@
                             @Html.DisplayNameFor(p => p.Created):
                         </th>
                         <td>
-                            @Model.Created.ToString("yy-MM-dd"))
+                            @Model.Created.ToString("yy-MM-dd")
                         </td>
                     </tr>
                     <tr>
@@ -90,8 +90,6 @@
             @Html.Action("Index", "TicketAttachment", new { id = Model.Id })
             @Html.Action("Index", "TicketComment", new { id = Model.Id })
             @Html.Action("Index", "TicketHistory", new { id = Model.Id })
-            @*@Html.Action("CreateAttachment", "TicketAttachment", new { id = Model.Id })
-        @Html.Action("CreateComment", "TicketComment", new { id = Model.Id })*@
         </div>
     </div>
 </div>

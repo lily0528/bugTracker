@@ -13,8 +13,8 @@
             @*@if (User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("Project Manager")))
                 {*@
             @*<div class="card-header">
-                <div><a class="btn btn-primary" href="@Url.Action("CreateTicket")">Create New</a></div>
-            </div>*@
+                    <div><a class="btn btn-primary" href="@Url.Action("CreateTicket")">Create New</a></div>
+                </div>*@
             @*}*@
             <div class="card-body">
                 <div class="table-responsive">
@@ -50,23 +50,23 @@
                         <tbody>
                             @foreach (var record in Model)
                             {
-                            <tr>
-                                <td>@record.ProjectName</td>
-                                <td> <a href="@Url.Action("Details", "Ticket", new { id = record.Id })">@record.Title</a></td>
-                                <td>@record.Created</td>
-                                <td>@record.Updated</td>
-                                <td>@record.TicketTypeName</td>
-                                <td>@record.TicketStatusName</td>
-                                <td>@record.TicketPriorityName</td>
-                                <td>@record.CreatedByName</td>
-                                @if (record.AssignedName == null)
-                                {
-                                    <td></td>
-                                }
-                                else
-                                {
-                                    <td>@record.AssignedName</td>
-                                }
+                                <tr>
+                                    <td>@record.ProjectName</td>
+                                    <td> <a href="@Url.Action("Details", "Ticket", new { id = record.Id })">@record.Title</a></td>
+                                    <td>@record.Created</td>
+                                    <td>@record.Updated</td>
+                                    <td>@record.TicketTypeName</td>
+                                    <td>@record.TicketStatusName</td>
+                                    <td>@record.TicketPriorityName</td>
+                                    <td>@record.CreatedByName</td>
+                                    @if (record.AssignedName == null)
+                                    {
+                                        <td></td>
+                                    }
+                                    else
+                                    {
+                                        <td>@record.AssignedName</td>
+                                    }
                                     <td>
                                         <a href="@Url.Action("EditTicket", "Ticket", new { id = record.Id })">
                                             <i class="far fa-edit"></i>
@@ -83,11 +83,14 @@
                                         <a href="@Url.Action("CreateComment", "TicketComment", new { id = record.Id})">
                                             <i class="fas fa-comment"></i>
                                         </a>
-                                        <a href="@Url.Action("Index", "Notification", new { id = record.Id})">
-                                            <i class="fas fa-envelope"></i>
-                                        </a>
+                                        @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+                                        {
+                                            <a href="@Url.Action("Index", "Notification", new { id = record.Id })">
+                                                <i class="fas fa-envelope"></i>
+                                            </a>
+                                        }
                                     </td>
-                            </tr>
+                                </tr>
                             }
                         </tbody>
                     </table>

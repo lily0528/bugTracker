@@ -25,6 +25,8 @@ namespace bugTracker.Models.ViewModels.TicketView
         public SelectList Project { get; set; }
         public SelectList TicketType { get; set; }
         public SelectList TicketPriority { get; set; }
+
+        public bool NotifyMe { get; set; }
     }
     
 }
