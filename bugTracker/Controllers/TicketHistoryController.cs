@@ -13,17 +13,14 @@ namespace bugTracker.Controllers
     public class TicketHistoryController : Controller
     {
         private ApplicationDbContext DbContext;
-        //private TicketHelper TicketHelper { get; }
 
         public TicketHistoryController()
         {
             DbContext = new ApplicationDbContext();
-            //TicketHelper = new TicketHelper(DbContext);
         }
         // GET: TicketHistory
         public ActionResult Index(int? id)
         {
-
             if (!id.HasValue)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -39,8 +36,6 @@ namespace bugTracker.Controllers
                 UserName = p.User.UserName,
                 Updated = p.Updated
             }).ToList();
-            //var TicketHisttories = DbContext.TicketHistories.ToList();
-            //var model = Mapper.Map<List<IndexTicketHisttory>>(TicketHisttories);
             return View(model);
         }
     }

@@ -224,38 +224,13 @@ namespace bugTracker.Controllers
                     }
                 }
 
-                //if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
-                //{
-                //    if (formData.NotifyMe)
-                //    {
-                //        ticket.BlockingUsers.Remove(user);
-                //    }
-                //    else
-                //    {
-                //        ticket.BlockingUsers.Add(user);
-                //    }
-                //}
-
                 ticket.Updated = DateTime.Now;
                 DbContext.TicketHistories.AddRange(changes);
                 DbContext.SaveChanges();
                 string subject = $"Ticket [{ticket.Title}] was modified!";
                 string body = $"Ticket [{ticket.Title}] was modified! Please pay attention to check in!";
 
-                // subject = "..."
-                // body = "..."
-                //if (ticket.AssignedToId != userId)
-                //{
-                //    TicketHelper.SendNotification(ticket.AssignedTo.Email, subject, body);
-                //}
-
                 var roleHelper = new UserRoleHelper(DbContext);
-                //var roleIds = roleHelper.GetAllRoles().Where(r => r.Name == "Admin" || r.Name == "Project Manager").Select(r => r.Id).ToList();
-                //var receivers = UserManager.Users
-                //    .Where(u => u.Roles.Any(r => roleIds.Contains(r.RoleId)) &&
-                //                !ticket.BlockingUsers.Any(b => b.Id == userId) &&
-                //                u.Id != ticket.AssignedToId).Select(x => x.Email).ToList();
-                //var roleHelper = new UserRoleHelper(DbContext);
                 var receivers = roleHelper.UsersInRole("Admin").Concat(roleHelper.UsersInRole("Project Manager"))
                                .Where(u => u.Id != ticket.AssignedToId && !ticket.BlockingUsers.Any(b => b.Id == u.Id));
                 var emails = receivers.Select(u => u.Email).ToList();
@@ -265,8 +240,6 @@ namespace bugTracker.Controllers
                 }
                 var allEmails = string.Join(",", emails);
                 TicketHelper.SendNotification(allEmails, subject, body);
-
-                //TicketHelper.EmailServiceSend(id, subject, body);
             }
 
             if (User.IsInRole("Submitter") || User.IsInRole("Developer"))
@@ -312,9 +285,6 @@ namespace bugTracker.Controllers
                 TicketTypeId = ticket.TicketTypeId,
                 TicketPriorityId = ticket.TicketPriorityId,
                 TicketStatusId = ticket.TicketStatusId,
-                // If the user is in the blocking list, NotifyMe is false
-                // NotifyMe will be true if the user is not in the blocking list
-                //NotifyMe = !ticket.BlockingUsers.Any(u => u.Id == userId)
             };
             return View(model);
         }
@@ -335,7 +305,6 @@ namespace bugTracker.Controllers
         }
 
         [HttpGet]
-        //[MVCFiltersAuthorization(Roles = "Admin,Project Manager")]
         [Authorize(Roles = "Admin,Project Manager")]
         public ActionResult AssignDeveloper(int id)
         {
@@ -369,33 +338,15 @@ namespace bugTracker.Controllers
                 return RedirectToAction(nameof(TicketController.Index));
             }
             var userId = User.Identity.GetUserId();
-            //var user = DbContext.Users.FirstOrDefault(u => u.Id == userId);
             var ticket = DbContext.Tickets.FirstOrDefault(p => p.Id == id);
-            //Del developer who existed in notification table
-            //var NotificationDeveloper = DbContext.TicketNotifications.FirstOrDefault(p => p.UserId == ticket.AssignedToId);
-            //if (NotificationDeveloper != null)
-            //{
-            //    DbContext.TicketNotifications.Remove(NotificationDeveloper);
-            //}
-
-            ////Add developer to notification table
-            //var ticketNotification = DbContext.TicketNotifications.FirstOrDefault(p => p.UserId == formData.DeveloperId);
-            //if (ticketNotification == null)
-            //{
-            //    var notification = new TicketNotification
-            //    {
-            //        TicketId = ticket.Id,
-            //        UserId = formData.DeveloperId
-            //    };
-            //    DbContext.TicketNotifications.Add(notification);
-            //}
 
             //Update ticket user information
             ticket.AssignedToId = formData.DeveloperId;
 
             var changes = new List<TicketHistory>();
             var entry = DbContext.Entry(ticket);
-
+        
+            //Add ticket history information
             foreach (var propertyName in entry.OriginalValues.PropertyNames)
             {
                 var originalValue = entry.OriginalValues[propertyName]?.ToString();

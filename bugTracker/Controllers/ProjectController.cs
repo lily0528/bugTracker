@@ -214,7 +214,6 @@ namespace bugTracker.Controllers
             return RedirectToAction("EditMemberProject", new { id = project.Id });
         }
 
-
         [Authorize(Roles = "Admin,Project Manager")]
         public ActionResult Archive(int? id)
         {

@@ -28,6 +28,5 @@ namespace bugTracker.Models.ViewModels.TicketView
 
         public DateTime Updated { get; set; }
 
-        //public bool NotifyMe { get; set; }
     }
 }
