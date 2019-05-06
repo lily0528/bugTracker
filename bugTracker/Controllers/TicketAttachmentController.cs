@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using bugTracker.Models;
 using bugTracker.Models.Domain;
+using bugTracker.Models.Helpers;
 using bugTracker.Models.ViewModels.AttachmentView;
 using Microsoft.AspNet.Identity;
 using System;
@@ -153,13 +154,19 @@ namespace bugTracker.Controllers
                 DbContext.TicketAttachments.Add(ticketAttachment);
                 DbContext.SaveChanges();
 
-                // Send Email to developer
+                // Send Email to developer/admin/Project manager who should receive notification.
+                var roleHelper = new UserRoleHelper(DbContext);
+                string subject = $"<p>New attachement [{formData.Description}] was added!</p>";
+                string body = $"<p>New attachement [{formData.Description}] was added!</p>";
+                var receivers = roleHelper.UsersInRole("Admin").Concat(roleHelper.UsersInRole("Project Manager"))
+                               .Where(u => u.Id != ticket.AssignedToId && !ticket.BlockingUsers.Any(b => b.Id == u.Id));
+                var emails = receivers.Select(u => u.Email).ToList();
                 if (ticket.AssignedTo != null)
                 {
-                    string subject = $"<p>New attachement {formData.Description} was assigned to you!</p>";
-                    string body = $"<p>New attachement {formData.Description} was assigned to you!</p>";
-                    TicketHelper.EmailServiceSend(id, subject, body);
+                    emails.Add(ticket.AssignedTo.Email);
                 }
+                var allEmails = string.Join(",", emails);
+                TicketHelper.SendNotification(allEmails, subject, body);
                 return RedirectToAction("CreateAttachment", "TicketAttachment", new { id = ticketAttachment.TicketId });
             }
             else

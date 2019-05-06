@@ -14,24 +14,7 @@ namespace bugTracker.Controllers
         {
             DbContext = dbContext;
         }
-        public void EmailServiceSend(int? id, string subject, string body)
-        {
 
-            var emailService = new EmailService();
-            //var userList = DbContext.TicketNotifications.Where(p => p.Users.Any(u => u.Id == userId)).
-            var addresses = DbContext.TicketNotifications.Where(p => p.TicketId == id).Select(m => m.User.Email).ToList();
-            if(addresses.Any())
-            {
-                var addressesList = string.Join(",", addresses.ToArray());
-                var message = new MailMessage(ConfigurationManager.AppSettings["SmtpFrom"], addressesList)
-                {
-                    Subject = subject,
-                    Body = body,
-                    IsBodyHtml = true
-                };
-                emailService.Send(addressesList, message.Body, message.Subject);
-            }
-        }
 
         public void SendNotification(string allEmails, string subject, string body)
         {
@@ -53,6 +36,25 @@ namespace bugTracker.Controllers
         //public void SendNotification(string email, string subject, string body)
         //{
         //    SendNotification(new List<string> { email }, subject, body); 
+        //}
+
+        //public void EmailServiceSend(int? id, string subject, string body)
+        //{
+
+        //    var emailService = new EmailService();
+        //    //var userList = DbContext.TicketNotifications.Where(p => p.Users.Any(u => u.Id == userId)).
+        //    var addresses = DbContext.TicketNotifications.Where(p => p.TicketId == id).Select(m => m.User.Email).ToList();
+        //    if (addresses.Any())
+        //    {
+        //        var addressesList = string.Join(",", addresses.ToArray());
+        //        var message = new MailMessage(ConfigurationManager.AppSettings["SmtpFrom"], addressesList)
+        //        {
+        //            Subject = subject,
+        //            Body = body,
+        //            IsBodyHtml = true
+        //        };
+        //        emailService.Send(addressesList, message.Body, message.Subject);
+        //    }
         //}
     }
 }

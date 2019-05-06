@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using bugTracker.Models;
 using bugTracker.Models.Domain;
+using bugTracker.Models.Helpers;
 using bugTracker.Models.ViewModels.CommentView;
 using Microsoft.AspNet.Identity;
 using System;
@@ -128,13 +129,20 @@ namespace bugTracker.Controllers
                 DbContext.TicketComments.Add(ticketComment);
                 DbContext.SaveChanges();
 
-                //Send Email to developer
+                //Send Email 
+                var roleHelper = new UserRoleHelper(DbContext);
+                string subject = $"<p>New comment [{formData.Comment}] was added!</p>";
+                string body = $"<p>New comment [{formData.Comment}] was added!</p>";
+                var receivers = roleHelper.UsersInRole("Admin").Concat(roleHelper.UsersInRole("Project Manager"))
+                               .Where(u => u.Id != ticket.AssignedToId && !ticket.BlockingUsers.Any(b => b.Id == u.Id));
+                var emails = receivers.Select(u => u.Email).ToList();
                 if (ticket.AssignedTo != null)
                 {
-                    string subject = "New ticket comment was added.";
-                    string body = "New ticket comment was added.";
-                    TicketHelper.EmailServiceSend(id, subject, body);
+                    emails.Add(ticket.AssignedTo.Email);
                 }
+                var allEmails = string.Join(",", emails);
+                TicketHelper.SendNotification(allEmails, subject, body);
+
                 return RedirectToAction("CreateComment", "TicketComment", new { id = ticketComment.TicketId });
             }
             else
