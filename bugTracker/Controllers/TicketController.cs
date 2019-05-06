@@ -143,10 +143,10 @@ namespace bugTracker.Controllers
                 };
 
                 // var notifyMe = (User.IsInRole("Admin") || User.IsInRole("Project Manager")) ? formData.NotifyMe : true;
-                if ((User.IsInRole("Admin") || User.IsInRole("Project Manager")) && !formData.NotifyMe)
-                {
-                    ticket.BlockingUsers.Add(user);
-                }
+                //if ((User.IsInRole("Admin") || User.IsInRole("Project Manager")) && !formData.NotifyMe)
+                //{
+                //    ticket.BlockingUsers.Add(user);
+                //}
 
                 DbContext.Tickets.Add(ticket);
                 DbContext.SaveChanges();
@@ -224,23 +224,23 @@ namespace bugTracker.Controllers
                     }
                 }
 
-                if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
-                {
-                    if (formData.NotifyMe)
-                    {
-                        ticket.BlockingUsers.Remove(user);
-                    }
-                    else
-                    {
-                        ticket.BlockingUsers.Add(user);
-                    }
-                }
+                //if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+                //{
+                //    if (formData.NotifyMe)
+                //    {
+                //        ticket.BlockingUsers.Remove(user);
+                //    }
+                //    else
+                //    {
+                //        ticket.BlockingUsers.Add(user);
+                //    }
+                //}
 
                 ticket.Updated = DateTime.Now;
                 DbContext.TicketHistories.AddRange(changes);
                 DbContext.SaveChanges();
-                string subject = "New ticket was modified to you.";
-                string body = "New ticket was modified to you.";
+                string subject = $"Ticket [{ticket.Title}] was modified!";
+                string body = $"Ticket [{ticket.Title}] was modified! Please pay attention to check in!";
 
                 // subject = "..."
                 // body = "..."
@@ -259,7 +259,10 @@ namespace bugTracker.Controllers
                 var receivers = roleHelper.UsersInRole("Admin").Concat(roleHelper.UsersInRole("Project Manager"))
                                .Where(u => u.Id != ticket.AssignedToId && !ticket.BlockingUsers.Any(b => b.Id == u.Id));
                 var emails = receivers.Select(u => u.Email).ToList();
-                             emails.Add(ticket.AssignedTo.Email);
+                if (ticket.AssignedTo != null)
+                {
+                    emails.Add(ticket.AssignedTo.Email);
+                }
                 var allEmails = string.Join(",", emails);
                 TicketHelper.SendNotification(allEmails, subject, body);
 
@@ -311,7 +314,7 @@ namespace bugTracker.Controllers
                 TicketStatusId = ticket.TicketStatusId,
                 // If the user is in the blocking list, NotifyMe is false
                 // NotifyMe will be true if the user is not in the blocking list
-                NotifyMe = !ticket.BlockingUsers.Any(u => u.Id == userId)
+                //NotifyMe = !ticket.BlockingUsers.Any(u => u.Id == userId)
             };
             return View(model);
         }
@@ -351,7 +354,8 @@ namespace bugTracker.Controllers
                 TicketTitle = ticket.Title,
                 TicketId = ticket.Id,
                 ProjectId = ticket.ProjectId,
-                DeveloperList = new SelectList(projectDeveloper, "Id", "UserName")
+                DeveloperList = new SelectList(projectDeveloper, "Id", "UserName"),
+                DeveloperId = ticket.AssignedToId
             };
             return View(model);
         }
@@ -401,7 +405,7 @@ namespace bugTracker.Controllers
                 {
                     if (propertyName == "AssignedToId")
                     {
-                        
+
                         originalValue = DbContext.Users.FirstOrDefault(p => p.Id == ticket.AssignedToId).UserName;
                         currentValue = DbContext.Users.FirstOrDefault(p => p.Id == formData.DeveloperId).UserName;
                         fieldName = "Assigned to";
@@ -423,14 +427,17 @@ namespace bugTracker.Controllers
             DbContext.SaveChanges();
 
             //Send Email
-            string subject = $"New ticket was assigned to {ticket.AssignedTo.UserName}.";
-            string body = $"New ticket was assigned to {ticket.AssignedTo.UserName}.";
+            string subject = $"Ticket [{ticket.Title}] was assigned to [{ticket.AssignedTo.UserName}].";
+            string body = $"Ticket [{ticket.Title}] was assigned to [{ticket.AssignedTo.UserName}].";
 
             var roleHelper = new UserRoleHelper(DbContext);
             var receivers = roleHelper.UsersInRole("Admin").Concat(roleHelper.UsersInRole("Project Manager"))
                            .Where(u => u.Id != ticket.AssignedToId && !ticket.BlockingUsers.Any(b => b.Id == u.Id));
             var emails = receivers.Select(u => u.Email).ToList();
-            emails.Add(ticket.AssignedTo.Email);
+            if (ticket.AssignedTo != null)
+            {
+                emails.Add(ticket.AssignedTo.Email);
+            }
             var allEmails = string.Join(",", emails);
             TicketHelper.SendNotification(allEmails, subject, body);
             return RedirectToAction(nameof(TicketController.Index));

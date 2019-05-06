@@ -131,7 +131,7 @@ namespace bugTracker.Controllers
 
                 //Send Email 
                 var roleHelper = new UserRoleHelper(DbContext);
-                string subject = $"<p>New comment [{formData.Comment}] was added!</p>";
+                string subject = $"New comment [{formData.Comment}] was added!";
                 string body = $"<p>New comment [{formData.Comment}] was added!</p>";
                 var receivers = roleHelper.UsersInRole("Admin").Concat(roleHelper.UsersInRole("Project Manager"))
                                .Where(u => u.Id != ticket.AssignedToId && !ticket.BlockingUsers.Any(b => b.Id == u.Id));

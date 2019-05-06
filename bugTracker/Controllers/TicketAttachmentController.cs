@@ -156,7 +156,7 @@ namespace bugTracker.Controllers
 
                 // Send Email to developer/admin/Project manager who should receive notification.
                 var roleHelper = new UserRoleHelper(DbContext);
-                string subject = $"<p>New attachement [{formData.Description}] was added!</p>";
+                string subject = $"New attachement [{formData.Description}] was added!";
                 string body = $"<p>New attachement [{formData.Description}] was added!</p>";
                 var receivers = roleHelper.UsersInRole("Admin").Concat(roleHelper.UsersInRole("Project Manager"))
                                .Where(u => u.Id != ticket.AssignedToId && !ticket.BlockingUsers.Any(b => b.Id == u.Id));

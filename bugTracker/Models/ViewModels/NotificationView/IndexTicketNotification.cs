@@ -10,6 +10,7 @@ namespace bugTracker.Models.ViewModels.NotificationView
         public int Id { get; set; }
         public int TicketId { get; set; }
         public string UserId { get; set; }
-        public bool IfNotice { get; set; }
+        //public bool IfNotice { get; set; }
+        public bool NotifyMe { get; set; }
     }
 }

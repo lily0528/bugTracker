@@ -3,38 +3,37 @@
     ViewBag.Title = "Index";
 
 }
+@if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+{ 
+    <div class="row">
+        <div class="col-lg-11">
+            <div class="card mb-8">
+                <div class="card-header">
+                    <i class="fas fa-angle-down"></i><span>&emsp;</span><strong>Notification</strong>
 
-@*<input id="responsable" name="checkResp" value="true" type="checkbox" />*@
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm("SaveNotification", "Notification", new { ticketId = Model.TicketId }))
+                    {
 
-<div class="row">
-    <div class="col-lg-11">
-        <div class="card mb-8">
-            <div class="card-header">
-                <i class="fas fa-angle-down"></i><span>&emsp;</span><strong>Notification</strong>
+                        <div class="form-group">
+                            @Html.HiddenFor(model => model.TicketId)
+                            @Html.HiddenFor(model => model.UserId)
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(Model => Model.NotifyMe, "Notify Me:")
+                            @Html.CheckBoxFor(Model => Model.NotifyMe)
+                            (If you don't want receive notification, please set empty value!")
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    }
 
+                </div>
+                <div class="m-3"><strong>@Html.ActionLink("Back Last Page ", "Index", "Ticket")</strong><i class="fas fa-undo"></i></div>
             </div>
-            <div class="card-body">
-                @using (Html.BeginForm("SaveNotification", "Notification", new { ticketId = Model.TicketId }))
-                {
-
-                    <div class="form-group">
-                        @Html.HiddenFor(model => model.TicketId)
-                        @Html.HiddenFor(model => model.UserId)
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(p => p.IfNotice, "Do you want to receive the Email?")
-                        @Html.CheckBoxFor(p => p.IfNotice)
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                }
-
-            </div>
-            <div class="m-3"><strong>@Html.ActionLink("Back Last Page ", "Index", "Ticket")</strong><i class="fas fa-undo"></i></div>
         </div>
     </div>
-</div>
-
-
+}
 @section scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }

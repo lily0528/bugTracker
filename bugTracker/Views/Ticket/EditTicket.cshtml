@@ -12,14 +12,14 @@
             </div>
             <div class="card-body">
                 <form method="post">
-                    @if(User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+                    @*@if(User.IsInRole("Admin") || User.IsInRole("Project Manager"))
                         {
                     <div class="form-group">
                         @Html.LabelFor(Model => Model.NotifyMe, "Notify Me:")
                         @Html.CheckBoxFor(Model => Model.NotifyMe)
                         (If you don't want receive notification, please set empty value!")
                     </div>
-                        }
+                        }*@
                         <div class="form-group">
                             @Html.LabelFor(p => p.Title, "Ticket Title:")
                             @Html.TextBoxFor(p => p.Title, new { @class = "form-control", placeholder = "Ticket Title" })
