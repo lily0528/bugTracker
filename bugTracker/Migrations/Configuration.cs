@@ -127,7 +127,7 @@ namespace bugTracker.Migrations
                 var ModeratorRole = new IdentityRole("Developer");
                 roleManager.Create(ModeratorRole);
             }
-            if (!context.Users.Any(p => p.UserName == "ProjectManager@gmail.com"))
+            if (!context.Users.Any(p => p.UserName == "Developer@gmail.com"))
             {
                 DeveloperUser = new ApplicationUser();
                 DeveloperUser.UserName = "Developer@gmail.com";
@@ -147,7 +147,6 @@ namespace bugTracker.Migrations
             {
                 userManager.AddToRole(DeveloperUser.Id, "Developer");
             }
-
 
             //  This method will be called after migrating to the latest version.
 

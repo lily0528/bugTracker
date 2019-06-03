@@ -118,8 +118,8 @@ namespace bugTracker.Controllers
             }
 
             if (User.IsInRole("Admin") || User.IsInRole("Project Manager")
-                 || ( User.IsInRole("Submitter") && ticket.CreatedById == userId)
-                 || ( User.IsInRole("Developer") && ticket.AssignedToId == userId))
+                 || (User.IsInRole("Submitter") && ticket.CreatedById == userId)
+                 || (User.IsInRole("Developer") && ticket.AssignedToId == userId))
             {
                 string fileExtension;
                 if (formData.Media != null)

@@ -172,54 +172,21 @@ namespace bugTracker.Controllers
                 {
                     var originalValue = entry.OriginalValues[propertyName]?.ToString();
                     var currentValue = entry.CurrentValues[propertyName]?.ToString();
-                    string fieldName = null;
+
                     if (originalValue != currentValue)
                     {
-                        if (propertyName == "Title")
-                        {
-                            fieldName = "Title";
-                        }
-                        if (propertyName == "Description")
-                        {
-                            fieldName = "Description";
-                        }
-                        if (propertyName == "ProjectId")
-                        {
-                            var projectId = Convert.ToInt32(originalValue);
-                            originalValue = DbContext.Projects.FirstOrDefault(p => p.Id == projectId).Name;
-                            currentValue = DbContext.Projects.FirstOrDefault(p => p.Id == formData.ProjectId).Name;
-                            fieldName = "Project";
-                        }
-                        if (propertyName == "TicketTypeId")
-                        {
-                            var ticketTypeId = Convert.ToInt32(originalValue);
-                            originalValue = DbContext.TicketTypes.FirstOrDefault(p => p.Id == ticketTypeId).Name;
-                            currentValue = DbContext.TicketTypes.FirstOrDefault(p => p.Id == formData.TicketTypeId).Name;
-                            fieldName = "TicketType";
-                        }
-                        if (propertyName == "TicketPriorityId")
-                        {
-                            var ticketPriorityId = Convert.ToInt32(originalValue);
-                            originalValue = DbContext.TicketPriorities.FirstOrDefault(p => p.Id == ticketPriorityId).Name;
-                            currentValue = DbContext.TicketPriorities.FirstOrDefault(p => p.Id == formData.TicketPriorityId).Name;
-                            fieldName = "TicketPriority";
-                        }
-                        if (propertyName == "TicketStatusId")
-                        {
-                            var ticketStatusId = Convert.ToInt32(originalValue);
-                            originalValue = DbContext.TicketStatuses.FirstOrDefault(p => p.Id == ticketStatusId).Name;
-                            currentValue = DbContext.TicketStatuses.FirstOrDefault(p => p.Id == formData.TicketStatusId).Name;
-                            fieldName = "TicketStatus";
-                        }
+                        var result = GetDescriptionOnDatabase(propertyName, originalValue, currentValue);
+
                         var ticketHistory = new TicketHistory
                         {
                             Updated = DateTime.Now,
-                            OldValue = originalValue,
-                            NewValue = currentValue,
-                            Property = fieldName,
+                            OldValue = result.OriginalDescription,
+                            NewValue = result.CurrentDescription,
+                            Property = propertyName.Replace("Id", ""),
                             TicketId = ticket.Id,
                             UserId = userId
                         };
+
                         changes.Add(ticketHistory);
                     }
                 }
@@ -250,6 +217,56 @@ namespace bugTracker.Controllers
             {
                 return RedirectToAction(nameof(TicketController.Index));
             }
+        }
+
+        private DescriptionForProperties GetDescriptionOnDatabase(string propertyName, string originalValue, string currentValue)
+        {
+            var model = new DescriptionForProperties();
+            var properties = new List<string>() { "ProjectId", "TicketTypeId", "TicketPriorityId", "TicketStatusId" };
+            
+            if (!properties.Contains(propertyName))
+            {
+                model.OriginalDescription = originalValue;
+                model.CurrentDescription = currentValue;
+                return model;
+            }
+
+            var originalValueInt = Convert.ToInt32(originalValue);
+            var currentValueInt = Convert.ToInt32(currentValue);
+
+
+            if (propertyName == "ProjectId")
+            {   
+                model.OriginalDescription = DbContext.Projects.FirstOrDefault(p => p.Id == originalValueInt).Name;
+                model.CurrentDescription = DbContext.Projects.FirstOrDefault(p => p.Id == currentValueInt).Name;
+
+            }
+            if (propertyName == "TicketTypeId")
+            {
+                model.OriginalDescription = originalValue = DbContext.TicketTypes.FirstOrDefault(p => p.Id == originalValueInt).Name;
+                model.CurrentDescription = currentValue = DbContext.TicketTypes.FirstOrDefault(p => p.Id == currentValueInt).Name;
+
+            }
+            if (propertyName == "TicketPriorityId")
+            {
+                model.OriginalDescription = DbContext.TicketPriorities.FirstOrDefault(p => p.Id == originalValueInt).Name;
+                model.CurrentDescription = DbContext.TicketPriorities.FirstOrDefault(p => p.Id == currentValueInt).Name;
+
+            }
+            if (propertyName == "TicketStatusId")
+            {
+                model.OriginalDescription = DbContext.TicketStatuses.FirstOrDefault(p => p.Id == originalValueInt).Name;
+                model.CurrentDescription = DbContext.TicketStatuses.FirstOrDefault(p => p.Id == currentValueInt).Name;
+
+            }
+
+            return model;
+        }
+
+        public class DescriptionForProperties
+        {
+            public string OriginalDescription { get; set; }
+            public string CurrentDescription { get; set; }
         }
 
         [HttpGet]
@@ -345,7 +362,7 @@ namespace bugTracker.Controllers
 
             var changes = new List<TicketHistory>();
             var entry = DbContext.Entry(ticket);
-        
+
             //Add ticket history information
             foreach (var propertyName in entry.OriginalValues.PropertyNames)
             {
